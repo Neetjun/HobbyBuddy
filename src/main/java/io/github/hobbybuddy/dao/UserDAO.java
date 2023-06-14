@@ -6,4 +6,5 @@ public interface UserDAO {
     // 회원가입
     int registration(UserDTO user);
     UserDTO login(UserDTO user);
+    String dupCheck(String id);
 }

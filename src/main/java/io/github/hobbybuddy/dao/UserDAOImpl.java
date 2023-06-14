@@ -22,4 +22,6 @@ public class UserDAOImpl implements UserDAO {
     {
         return session.selectOne(namespace+"login", user);
     }
+    @Override
+    public String dupCheck(String id) {return session.selectOne(namespace+"dupCheck", id); }
 }

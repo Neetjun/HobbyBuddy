@@ -11,8 +11,14 @@
     </insert>
 
     <select id="login" parameterType="UserDTO" resultType="UserDTO">
-        SELECT UNO, ID, Pw, NICKNAME, U_REG_DATE
+        SELECT UNO, ID, PW, NICKNAME, U_REG_DATE
         FROM USERINFO
         WHERE ID = #{id} AND PW = #{pw}
+    </select>
+
+    <select id="dupCheck" parameterType="String" resultType="String">
+        SELECT COUNT(*)
+        FROM USERINFO
+        WHERE ID = #{id}
     </select>
 </mapper>

@@ -303,6 +303,10 @@
             if($("#regCheck").val() == 1)
                 alert("회원가입 완료!");
 
+            /* 로그인 실패 알림 */
+            if($("#loginCheck").val() == "fail")
+                alert("로그인 실패.\nID와 PW를 확인해주세요.");
+
             /* 회원가입 및 로그인 모달창 띄우기 */
             $(".loginBox > button").click(function () {
                 // 눌린 버튼의 id 대입
@@ -343,6 +347,54 @@
                 $(".modal").fadeOut();
             });
 
+            /* 아이디 중복검사 */
+            $("#id > input").on("keyup", function () {
+
+                $.ajax({
+                    type: "GET",
+                    url: "<c:url value='/user/dupCheck'/>",
+                    dataType: "text",
+                    data: {"id" : $("#id > input").val()},
+                    success: function (result) {
+                        // 키 누를 때마다 체크 메시지 지우기
+                        $("#dupCheck").text("");
+
+                        // id글자수 조건 충족 및 회원가입 모달일 경우.
+                        if($("#id > input").val().length >= 6 && $("#modal-title").text() == "회원가입")
+                        {
+                            // 모달창 늘려주기
+                            $(".modal-content").css("height","220px");
+
+                            // 중복된 아이디가 있다면
+                            if(result == "duplicated")
+                            {
+                                // $("#dupCheck").text("중복된 ID입니다.");
+                                $("#dupCheck").text("중복!");
+                                $("#dupCheck").css("color","red");
+                                $("#dupCheck").css("fontSize","11pt");
+                                $("#pw").css("marginTop","10px");
+                            }
+                            else
+                            {
+                                // $("#dupCheck").text("OK");
+                                $("#dupCheck").text("중복검사 통과");
+                                $("#dupCheck").css("color","green");
+                                $("#dupCheck").css("fontSize","11pt");
+                                $("#pw").css("marginTop","10px");
+                            }
+                        }
+                        else
+                        {
+                            // 메세지 사라지면 모달창 크기 원상복구
+                            $(".modal-content").css("height","200px");
+                            $("#pw").css("marginTop","0");
+                        }
+                    },
+                    error: function (request) {$("#dupCheck").text("Err");}
+                });
+
+            });
+
             /*회원가입 시 아이디, 비밀번호, 닉네임 검사*/
             $("#regBtn").click(function () {
                 let idCheck = /^[a-z0-9+]{6,12}$/;
@@ -367,6 +419,11 @@
                     if(!nickCheck.test($("#nickname > input").val()))
                     {
                         alert("닉네임 형식이 올바르지 않습니다.");
+                        return;
+                    }
+                    if($("#dupCheck").text() == "중복!")
+                    {
+                        alert("아이디가 중복됩니다.");
                         return;
                     }
                 }
@@ -459,9 +516,10 @@
         <div class="modal-content">
             <div id="modal-title">회원가입</div>
             <form action='<c:url value="/user"/>' method="post">
-              <div id="id"> ID <span class="essential">*</span> <input type="text" name="id"> <span class="regCondition">영어 소문자 + 숫자 / 6글자 ~ 12글자</span> </div>
-              <div id="pw"> PW <span class="essential">*</span> <input type="password" name="pw"> <span class="regCondition">영어 대소문자 + 숫자 / 8글자 ~ 15글자</span> </div>
-              <div id="nickname"> 닉네임 <span class="essential">*</span> <input type="text" name="nickname"> <span class="regCondition">특수문자 제외 15글자</span> </div>
+                <div id="id"> ID <span class="essential">*</span> <input type="text" name="id"> <span class="regCondition">영어 소문자 + 숫자 / 6글자 ~ 12글자</span> </div>
+                <span id="dupCheck"></span>
+                <div id="pw"> PW <span class="essential">*</span> <input type="password" name="pw"> <span class="regCondition">영어 대소문자 + 숫자 / 8글자 ~ 15글자</span> </div>
+                <div id="nickname"> 닉네임 <span class="essential">*</span> <input type="text" name="nickname"> <span class="regCondition">특수문자 제외 15글자</span> </div>
                 <button type="button" id="regBtn">회원가입</button> <button type="reset" id="cancel">취소</button>
             </form>
         </div>
@@ -470,7 +528,7 @@
 
     <%-- 회원가입 성공 여부 확인 --%>
     <input type="hidden" id="regCheck" value="${regResult}">
-    <input type="hidden" id="loginCheck" value="${sessionScope.get("id")}">
+    <input type="hidden" id="loginCheck" value="${loginCheck}">
 
 </body>
 </html>

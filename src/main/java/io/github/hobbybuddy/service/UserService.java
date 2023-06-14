@@ -11,14 +11,17 @@ public class UserService {
     @Autowired
     UserDAO userDAO;
 
-    public int registUser(UserDTO user)
+    public int registerUser(UserDTO user)
     {
         return userDAO.registration(user);
     }
-
     public UserDTO loginUser(UserDTO user)
     {
         return userDAO.login(user);
+    }
+    public String idDupCheck(String id)
+    {
+        return userDAO.dupCheck(id);
     }
 
 }
