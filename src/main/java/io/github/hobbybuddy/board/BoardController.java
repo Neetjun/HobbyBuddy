@@ -18,7 +18,7 @@ import java.util.Map;
 public class BoardController {
 
     @Autowired
-    BoardService boardService;
+    private BoardService boardService;
 
     // 게시판 폼 불러오기 (쓰기)
     @GetMapping("")
@@ -44,12 +44,20 @@ public class BoardController {
 
     // 게시판 읽기
     @GetMapping("/{bno}")
-    public String readBoard(@PathVariable String bno, BoardDTO dto, Model m)
+    public String readBoard(@PathVariable Integer bno, BoardDTO dto, Model m, HttpSession session)
     {
-        dto = boardService.getBoard(bno);
+        dto = boardService.getBoard(dto.getBno());
+        String id = (String)session.getAttribute("id");
+
+        // 비회원 상태라면
+        id = id == null ? "" : id;
+
+        // 접속중 id과 게시글의 작성자 id가 일치하면 true 아니면 false.
+        boolean isWriter = id.equals(boardService.isWriter(dto));
 
         m.addAttribute("type", "read");
-        m.addAttribute("writer",boardService.getWriter(bno));
+        m.addAttribute("isWriter",isWriter);
+        m.addAttribute("writer",boardService.getWriter(dto.getBno()));
         m.addAttribute("boardDTO", dto);
 
         return "boardForm";

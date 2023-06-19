@@ -158,7 +158,7 @@ label
     margin: 0 auto;
 }
 
-#boardItem
+.boardItem
 {
     width: 230px;
     height: 250px;
@@ -167,7 +167,12 @@ label
     margin-right: 20px;
 }
 
-#Thumbnail
+.boardItem:hover
+{
+    cursor : pointer;
+}
+
+.Thumbnail
 {
     width: 100%;
     height: 160px;
@@ -179,23 +184,23 @@ label
     align-items: center;
 }
 
-#itemTitle
+.itemTitle
 {
     margin-top: 10px;
     margin-bottom: 10px;
     text-align: center;
     font-weight: bold;
     font-size: 14pt;
-    text-overflow-ellipsis: true;
+    text-overflow-ellipsis: ellipsis;
 }
 
-#itemInfo
+.itemInfo
 {
     font-weight: bold;
     font-size: 14pt;
     text-align: center;
 }
-#itemInfo > span
+.itemInfo > span
 {
     color: deepskyblue;
     padding: 15px;

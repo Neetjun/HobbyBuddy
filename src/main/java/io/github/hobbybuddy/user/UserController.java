@@ -16,7 +16,7 @@ import java.util.Map;
 public class UserController
 {
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     // 회원가입
     @PostMapping("")
@@ -28,7 +28,7 @@ public class UserController
         // 닉네임 수정
         if(mod.equals("modify"))
         {
-            userService.modiNickname(user);
+            userService.modNickname(user);
             session.setAttribute("nickname",user.getNickname());
             return "redirect:/";
         }
@@ -88,7 +88,7 @@ public class UserController
 
     // 닉네임 수정
     @PatchMapping("")
-    public String modiNickname(Model m, UserDTO user)
+    public String modNickname(Model m, UserDTO user)
     {
         return "";
     }

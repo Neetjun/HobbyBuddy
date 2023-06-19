@@ -57,19 +57,6 @@
 
     <%-- 게시판 영역 --%>
     <div class="boardList">
-<%--        <div id="boardItem">--%>
-<%--            <div id="Thumbnail">--%>
-<%--                Hobby Buddy--%>
-<%--            </div>--%>
-<%--            <div id="titleAndInfo">--%>
-<%--                <div id="itemTitle">임시제목이에요 ㅎㅎ</div>--%>
-<%--                <div id="itemInfo">--%>
-<%--                    <i class="fa-solid fa-thumbs-up"></i> <span>1</span>--%>
-<%--                    <i class="fa-solid fa-comment"></i> <span>1</span>--%>
-<%--                    <i class="fa-solid fa-eye"></i> <span>1</span>--%>
-<%--                </div>--%>
-<%--            </div>--%>
-<%--        </div>--%>
         <span id="noItem" hidden="hidden">
             게시물이 존재하지 않습니다.
         </span>

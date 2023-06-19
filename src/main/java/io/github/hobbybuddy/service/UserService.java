@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     @Autowired
-    UserDAO userDAO;
+    private UserDAO userDAO;
 
     public int registerUser(UserDTO user)
     {
@@ -22,6 +22,6 @@ public class UserService {
     {
         return userDAO.dupCheck(id);
     }
-    public void modiNickname(UserDTO user) {userDAO.modiNickname(user);}
+    public void modNickname(UserDTO user) {userDAO.modNickname(user);}
 
 }

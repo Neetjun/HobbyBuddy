@@ -45,7 +45,8 @@
             </div>
             <div id="boardBtn">
                 <c:choose>
-                    <c:when test="${type eq 'read' || type eq 'update'}">
+                    <c:when test="${type eq 'read'}">
+                        <input type="hidden" value="${isWriter}" id="isWriter">
                         <button id="goList" type="button">목록</button>
                         <button id="updateBoard" type="button">수정</button>
                         <button class="cancel" id="deleteBoard" type="button">삭제</button>

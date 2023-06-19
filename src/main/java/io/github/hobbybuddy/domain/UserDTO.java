@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class UserDTO
 {
-    Integer uno;
-    String id, pw, nickname;
-    Date u_reg_date;
+    private Integer uno;
+    private String id, pw, nickname;
+    private Date u_reg_date;
 
     public UserDTO(Integer uno, String id, String pw, String nickname, Date u_reg_date) {
         this.uno = uno;

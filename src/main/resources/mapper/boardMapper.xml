@@ -13,22 +13,28 @@
 
     <insert id="postBoard" parameterType="boardDTO">
         INSERT INTO BOARD (BNO, B_UNO, TITLE, B_CONTENT)
-        VALUES (NVL((SELECT MAX(BNO) FROM BOARD),0)+1, ${b_uno}, #{title}, #{b_content})
+        VALUES (SEQ_BNO.NEXTVAL, ${b_uno}, #{title}, #{b_content})
     </insert>
 
     <select id="getBoardList" resultType="BoardDTO">
         <include refid="selectAll"/>
     </select>
 
-    <select id="getBoard" parameterType="String" resultType="boardDTO">
+    <select id="getBoard" parameterType="int" resultType="boardDTO">
         <include refid="selectAll"/>
-        WHERE BNO = #{bno}
+        WHERE BNO = ${bno}
     </select>
 
-    <select id="getWriter" parameterType="String" resultType="String">
+    <select id="getWriter" parameterType="int" resultType="String">
         SELECT U.NICKNAME AS WRITER
         FROM BOARD B, USERINFO U
         WHERE B.B_UNO = U.UNO
           AND BNO = ${bno}
+    </select>
+
+    <select id="isWriter" parameterType="BoardDTO" resultType="String">
+        SELECT ID
+        FROM USERINFO
+        WHERE UNO = ${b_uno}
     </select>
 </mapper>

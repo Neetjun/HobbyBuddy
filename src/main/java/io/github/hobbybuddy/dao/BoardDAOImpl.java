@@ -19,12 +19,12 @@ public class BoardDAOImpl implements BoardDAO {
         session.insert(namespace+"postBoard",dto);
     }
     @Override
-    public BoardDTO getBoard(String bno)
+    public BoardDTO getBoard(Integer bno)
     {
         return session.selectOne(namespace+"getBoard",bno);
     }
     @Override
-    public String getWriter(String bno)
+    public String getWriter(Integer bno)
     {
         return session.selectOne(namespace+"getWriter",bno);
     }
@@ -33,4 +33,10 @@ public class BoardDAOImpl implements BoardDAO {
     {
         return session.selectList(namespace+"getBoardList");
     }
+    @Override
+    public String isWriter(BoardDTO dto)
+    {
+        return session.selectOne(namespace+"isWriter",dto);
+    }
+
 }

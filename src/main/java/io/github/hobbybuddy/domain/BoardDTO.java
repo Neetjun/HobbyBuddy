@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class BoardDTO
 {
-    Integer bno, b_uno, like_count, view_count;
-    String title, b_content;
-    Date b_reg_date, u_date;
+    private Integer bno, b_uno, like_count, view_count;
+    private String title, b_content;
+    private Date b_reg_date, u_date;
 
     @Override
     public String toString() {

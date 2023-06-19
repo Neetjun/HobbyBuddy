@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface BoardDAO {
     void postBoard(BoardDTO dto);
-    BoardDTO getBoard(String bno);
-    String getWriter(String bno);
+    BoardDTO getBoard(Integer bno);
+    String getWriter(Integer bno);
     List<BoardDTO> getBoardList();
+    String isWriter(BoardDTO dto);
 }

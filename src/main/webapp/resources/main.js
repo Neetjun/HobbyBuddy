@@ -168,17 +168,17 @@ $(document).ready(function () {
         , url : contextRoot+"board/list"
         , data: {"page":$("#page").val(),"keyword":$("#keyword").val(),"option":$("#option").val()}
         , success : function (list) {
-            if(list != null)
+            if(list.length != 0)
             {
                 $(".boardList").html("");
 
                 for(let i = 0; i < list.length; i++)
                 {
-                    let item = "<div id='boardItem'>";
-                    item += "<div id='Thumbnail'>" + "Hobby Buddy" + "</div>";
-                    item += "<div id='titleAndInfo'>";
-                    item += "<div id='itemTitle'>" + list[i].title + "</div>";
-                    item += "<div id='itemInfo'>"
+                    let item = "<div class='boardItem'>";
+                    item += "<div class='Thumbnail'>" + "Hobby Buddy" + "</div>";
+                    item += "<div class='titleAndInfo'>";
+                    item += "<div class='itemTitle'>" + list[i].title + "</div>";
+                    item += "<div class='itemInfo'>"
                     + "<i class='fa-solid fa-thumbs-up'></i>"
                     + "<span>" + list[i].like_count + "</span>"
                     + "<i class='fa-solid fa-comment'></i>"
@@ -187,18 +187,30 @@ $(document).ready(function () {
                     + "<span>" + list[i].view_count + "</span>";
                     item += "</div>" // itemInfo 끝
                     item += "</div>" // titleAndInfo 끝
+                    item += "<input hidden='hidden' value='" + list[i].bno + "'/>"
                     item += "</div>"; // boardItem 끝
                     $(".boardList").append(item);
                 }
             }
             else
+            {
+                $(".boardList").css("justifyContent","center");
                 $("#noItem").removeAttr("hidden");
+            }
 
         }
         , error : function (request, status, error) {
             alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
         }
     })
+
+    // 게시글 읽기
+    // ajax 이벤트가 안먹히므로 아래와 같이 코드 변경
+    // $(."boardItem").on("click", function () {
+    $(document).on("click", ".boardItem", function () {
+        let bno = $(this).children("input").val()
+        window.location.href = contextRoot+"board/"+bno;
+    });
 
     /* ----- BoardForm.jsp -------- */
 
@@ -236,7 +248,21 @@ $(document).ready(function () {
         content.css("height","auto");
         writerInfo.css("display","block");
     }
+
+    // 작성자 여부에 따른 수정, 삭제버튼 노출 여부
+    if($("#isWriter").val() != "true")
+    {
+        $("#updateBoard").css("display","none");
+        $("#deleteBoard").css("display","none");
+        $("#goList").css("marginLeft","940px");
+    }
     
+    // 목록으로 돌아가기
+    $("#goList").click(function () {
+        window.location.href = contextRoot;
+    });
+
+
     // 이미지 첨부 기능
     $("#imageBtn").click(function () {
         $("#imageInput").click();

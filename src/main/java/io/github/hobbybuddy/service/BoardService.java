@@ -10,18 +10,18 @@ import java.util.List;
 @Service
 public class BoardService {
     @Autowired
-    BoardDAO dao;
+    private BoardDAO dao;
 
     public void postBoard(BoardDTO dto)
     {
         dao.postBoard(dto);
     }
-    public BoardDTO getBoard(String bno)
+    public BoardDTO getBoard(Integer bno)
     {
         return dao.getBoard(bno);
     }
 
-    public String getWriter(String bno)
+    public String getWriter(Integer bno)
     {
         return dao.getWriter(bno);
     }
@@ -29,5 +29,9 @@ public class BoardService {
     public List<BoardDTO> getBoardList()
     {
         return dao.getBoardList();
+    }
+    public String isWriter(BoardDTO dto)
+    {
+        return dao.isWriter(dto);
     }
 }

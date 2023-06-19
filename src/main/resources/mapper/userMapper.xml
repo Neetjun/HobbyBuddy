@@ -7,7 +7,7 @@
 <mapper namespace="user">
     <insert id="registration" parameterType="UserDTO">
         INSERT INTO USERINFO
-        VALUES (NVL((SELECT MAX(UNO) FROM USERINFO),0)+1, #{id}, #{pw}, #{nickname}, SYSDATE)
+        VALUES (SEQ_UNO.NEXTVAL, #{id}, #{pw}, #{nickname}, SYSDATE)
     </insert>
 
     <select id="login" parameterType="UserDTO" resultType="UserDTO">
