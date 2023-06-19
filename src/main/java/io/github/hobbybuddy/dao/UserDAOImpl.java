@@ -24,4 +24,6 @@ public class UserDAOImpl implements UserDAO {
     }
     @Override
     public String dupCheck(String id) {return session.selectOne(namespace+"dupCheck", id); }
+    @Override
+    public void modiNickname(UserDTO user) {session.update(namespace+"updateNickname",user); }
 }

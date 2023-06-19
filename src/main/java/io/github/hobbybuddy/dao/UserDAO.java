@@ -7,4 +7,5 @@ public interface UserDAO {
     int registration(UserDTO user);
     UserDTO login(UserDTO user);
     String dupCheck(String id);
+    void modiNickname(UserDTO user);
 }

@@ -20,8 +20,19 @@ public class UserController
 
     // 회원가입
     @PostMapping("")
-    public String registration(UserDTO user, Model m, RedirectAttributes ra)
+    public String registration(UserDTO user, Model m, String mod, RedirectAttributes ra, HttpSession session)
     {
+        if(mod == null)
+            mod = "";
+        // PATCH 메서드 활용법 알아낼 때까지 임시 방편
+        // 닉네임 수정
+        if(mod.equals("modify"))
+        {
+            userService.modiNickname(user);
+            session.setAttribute("nickname",user.getNickname());
+            return "redirect:/";
+        }
+
         // 서비스 계층에서 user insert문 불러와서 실행
         int result = userService.registerUser(user);
 
@@ -39,18 +50,15 @@ public class UserController
         // 입력받은 id, pw를 통해 유저 정보 입력
         user = userService.loginUser(user);
 
-        System.out.println("user = " + user);
-
         // 제대로 유저 정보가 입력이 됐다면 세션에 id와 닉네임 저장
         if (user != null)
         {
             session.setAttribute("id", user.getId());
             session.setAttribute("nickname", user.getNickname());
+            session.setAttribute("uno", user.getUno());
         }
         else
-        {
             ra.addFlashAttribute("loginCheck","fail");
-        }
 
         System.out.println("user = " + user);
 
@@ -72,12 +80,18 @@ public class UserController
     {
         String result = "ok";
 
-        System.out.println("id = " + id);
-
         if(userService.idDupCheck(id.get("id")).equals("1"))
             result = "duplicated";
-        System.out.println("result = " + result);
+
         return result;
     }
+
+    // 닉네임 수정
+    @PatchMapping("")
+    public String modiNickname(Model m, UserDTO user)
+    {
+        return "";
+    }
+
 
 }

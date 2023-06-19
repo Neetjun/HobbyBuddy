@@ -21,4 +21,10 @@
         FROM USERINFO
         WHERE ID = #{id}
     </select>
+
+    <update id="updateNickname" parameterType="String">
+        UPDATE USERINFO
+        SET NICKNAME = #{nickname}
+        WHERE ID = #{id}
+    </update>
 </mapper>
