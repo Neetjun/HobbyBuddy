@@ -11,8 +11,8 @@ import java.util.List;
 @Repository
 public class BoardDAOImpl implements BoardDAO {
     @Autowired
-    SqlSession session;
-    String namespace = "board.";
+    private SqlSession session;
+    private String namespace = "board.";
     @Override
     public void postBoard(BoardDTO dto)
     {
@@ -34,9 +34,10 @@ public class BoardDAOImpl implements BoardDAO {
         return session.selectList(namespace+"getBoardList");
     }
     @Override
-    public String isWriter(BoardDTO dto)
-    {
-        return session.selectOne(namespace+"isWriter",dto);
-    }
+    public String isWriter(BoardDTO dto) { return session.selectOne(namespace+"isWriter",dto); }
+    @Override
+    public void deleteBoard(BoardDTO dto) {session.delete(namespace+"deleteBoard",dto);};
+    @Override
+    public void updateBoard(BoardDTO dto) {session.update(namespace+"updateBoard",dto);};
 
 }

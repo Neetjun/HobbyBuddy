@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- mapper DTD 선언 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- SQL Mapping -->
+<mapper namespace="comment">
+
+    <insert id="postCmt" parameterType="commentDTO">
+        INSERT INTO CMT (CNO, C_CONTENT, C_UNO, C_BNO)
+        VALUES (SEQ_CNO.NEXTVAL, #{c_content}, ${c_uno}, ${c_bno})
+    </insert>
+
+    <select id="getCmt" parameterType="Integer" resultType="commentDTO">
+        SELECT CNO, C_CONTENT, C_REG_DATE, TCNO, C_UNO, C_BNO
+        FROM CMT
+        WHERE C_BNO = ${bno}
+    </select>
+
+</mapper>

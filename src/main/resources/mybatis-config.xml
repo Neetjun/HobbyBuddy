@@ -6,5 +6,6 @@
     <typeAliases>
          <typeAlias alias="UserDTO" type="io.github.hobbybuddy.domain.UserDTO"/>
          <typeAlias alias="BoardDTO" type="io.github.hobbybuddy.domain.BoardDTO"/>
+         <typeAlias alias="CommentDTO" type="io.github.hobbybuddy.domain.CommentDTO"/>
     </typeAliases>
 </configuration>

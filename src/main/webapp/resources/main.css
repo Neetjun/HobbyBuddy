@@ -334,6 +334,7 @@ label
 /*-----------------------------------
 boardForm.jsp
 ------------------------------------*/
+/* 게시판 영역 */
 .board-area
 {
     width: 60%;
@@ -366,6 +367,7 @@ boardForm.jsp
     font-size: 12pt;
     padding-left: 10px;
     font-weight: bold;
+    outline: none;
 }
 #boardBtn
 {
@@ -430,14 +432,74 @@ boardForm.jsp
     border-top: 2px solid darkgray;
 }
 
-#goList, #updateBoard, #deleteBoard
+#goList, #goUpdate, #bDelete, #bUpdate, #uCancel
 {
     width: 60px;
     height: 30px;
     border: black solid 2px;
 }
 
+#bUpdate
+{
+    margin-left: 874px;
+}
+
+#bUpdate:hover, #goUpdate:hover
+{
+    background-color: darkorange;
+}
+
 #goList
 {
     margin-left: 808px;
 }
+
+#goList:hover
+{
+    background-color: cadetblue;
+}
+/* 게시판 영역 끝 */
+
+/* 덧글 영역 */
+.comment-area
+{
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-left: 450px;
+}
+
+.comment-area > span
+{
+    font-size: 16pt;
+    font-weight: bold;
+}
+.comment-area > form
+{
+    display: flex;
+    justify-content: flex-start;
+}
+
+#cInput
+{
+    padding-left: 15px;
+    margin-top: 30px;
+    height: 60px;
+    width: 900px;
+    border: 1px solid darkgray;
+    outline: none;
+    resize: none;
+}
+
+#cSubmit
+{
+    margin-top: 45px;
+    margin-left: 40px;
+    width: 60px;
+    height: 30px;
+}
+
+/* 덧글 영역 끝 */

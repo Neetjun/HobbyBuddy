@@ -37,4 +37,16 @@
         FROM USERINFO
         WHERE UNO = ${b_uno}
     </select>
+
+    <delete id="deleteBoard" parameterType="BoardDTO">
+        DELETE
+        FROM BOARD
+        WHERE BNO = ${bno}
+    </delete>
+
+    <update id="updateBoard" parameterType="BoardDTO">
+        UPDATE BOARD
+        SET TITLE = #{title}, B_CONTENT = #{b_content}, U_DATE = SYSDATE
+        WHERE BNO = ${bno}
+    </update>
 </mapper>

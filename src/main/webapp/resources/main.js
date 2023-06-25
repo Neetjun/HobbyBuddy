@@ -252,8 +252,8 @@ $(document).ready(function () {
     // 작성자 여부에 따른 수정, 삭제버튼 노출 여부
     if($("#isWriter").val() != "true")
     {
-        $("#updateBoard").css("display","none");
-        $("#deleteBoard").css("display","none");
+        $("#goUpdate").css("display","none");
+        $("#bDelete").css("display","none");
         $("#goList").css("marginLeft","940px");
     }
     
@@ -262,9 +262,112 @@ $(document).ready(function () {
         window.location.href = contextRoot;
     });
 
+    // 게시글 삭제하기
+    $("#bDelete").click(function () {
+
+        if(confirm("정말로 삭제하시겠습니까?"))
+        {
+            // alert("확인");
+            let formObj = $(this).parent().parent().parent();
+            let bno = $("#bno").val();
+            formObj.attr("action",contextRoot+"board/" + bno + "?mod=delete");
+            alert(formObj.attr("method"));
+            formObj.submit();
+        }
+        else
+            return;
+    });
+
+    // 게시글 수정 폼으로 변경
+    $("#goUpdate").click(function () {
+        // form태그 action 속성 변경
+        let formObj = $(this).parent().parent().parent();
+        let bno = $("#bno").val();
+        formObj.attr("action",contextRoot+"board/" + bno + "?mod=modify");
+
+        // 디자인 복구 및 readonly 속성 해제
+        let title = $("#board-title > input");
+        let content = $("#inputDiv");
+        let writerInfo = $("#writerInfo");
+        title.css("border","1px solid gray");
+        title.css("fontSize","12pt");
+        $("#board-title").prepend("<span>제목</span> <br>");
+        content.css("border","1px solid gray");
+        content.css("height","auto");
+        writerInfo.css("display","none");
+        title.removeAttr("readonly");
+        content.attr("contentEditable","true");
+
+        // 버튼 구성요소 변경
+        $("#goList").css("display","none");
+        $("#bDelete").css("display","none");
+        $(this).css("display","none");
+        $(this).parent().prepend("<button id='uCancel' class='cancel' type='button'>취소</button>");
+        $(this).parent().prepend("<button id='bUpdate' type='button'>수정</button> ");
+    });
+
+    // 게시글 수정하기
+    $(document).on("click", "#bUpdate", function () {
+        $("#board-content > textarea").text($("#inputDiv").html());
+        $(this).parent().parent().parent().submit();
+    });
+
+    // 게시글 수정 취소
+    $(document).on("click", "#uCancel", function () {
+        window.location.href = contextRoot+"board/"+$("#bno").val();
+    });
 
     // 이미지 첨부 기능
     $("#imageBtn").click(function () {
         $("#imageInput").click();
+    });
+
+    // 덧글 입력창 크기 자동조절
+    $("#cInput").keyup(function () {
+        // 스크롤 높이 가져오기
+        let newHeight = $(this).prop("scrollHeight") - 4;
+        
+        /* 단위까지 가져오는 방법 */
+        // let currentHeight = $(this).css("height");
+
+        /* 단위를 제외해서 가져오는 방법 */
+        let currentHeight = $(this).height();
+
+        if(newHeight > currentHeight)
+        {
+            $(this).css("height",newHeight+15+"px");
+            // $(this).css("height",newHeight+"px");
+            // $(this).css("overflow-y","hidden");
+        }
+    });
+
+    // 덧글 입력
+    $("#cSubmit").click(function () {
+        $(this).parent().submit();
+    });
+
+    // 덧글 가져오기
+    $.ajax({
+        type : "GET"
+        , url : contextRoot+"comment"
+        , data : {"bno" : $("#bno").val()}
+        , success : (function (cmtList) {
+
+            let html = "";
+
+            for(let i = 0; i < cmtList.length; i++)
+            {
+                html += "<div class='cmtItem'>";
+                html += cmtList[i].c_content;
+                html += "</div>";
+            }
+
+            console.log(html);
+
+            $("#commentList").html(html);
+        })
+        , error : (function (request) {
+            console.log(request.responseText);
+        })
     });
 });

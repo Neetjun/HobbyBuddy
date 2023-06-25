@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class BoardService {
+public class BoardService
+{
     @Autowired
     private BoardDAO dao;
 
@@ -34,4 +35,6 @@ public class BoardService {
     {
         return dao.isWriter(dto);
     }
+    public void deleteBoard(BoardDTO dto) { dao.deleteBoard(dto); }
+    public void updateBoard(BoardDTO dto) { dao.updateBoard(dto); }
 }

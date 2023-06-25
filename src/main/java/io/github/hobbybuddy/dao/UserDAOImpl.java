@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserDAOImpl implements UserDAO {
     @Autowired
-    SqlSession session;
-    String namespace = "user.";
+    private SqlSession session;
+    private String namespace = "user.";
 
     // 회원가입
     @Override

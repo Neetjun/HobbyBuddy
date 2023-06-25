@@ -10,4 +10,6 @@ public interface BoardDAO {
     String getWriter(Integer bno);
     List<BoardDTO> getBoardList();
     String isWriter(BoardDTO dto);
+    void deleteBoard(BoardDTO dto);
+    void updateBoard(BoardDTO dto);
 }
