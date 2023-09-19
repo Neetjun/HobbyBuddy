@@ -12,4 +12,5 @@ public interface BoardDAO {
     String isWriter(BoardDTO dto);
     void deleteBoard(BoardDTO dto);
     void updateBoard(BoardDTO dto);
+    List<BoardDTO> myBoardList(Integer uno);
 }

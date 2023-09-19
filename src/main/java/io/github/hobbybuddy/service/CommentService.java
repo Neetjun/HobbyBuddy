@@ -17,5 +17,6 @@ public class CommentService
     {
         commentDAO.postComment(commentDTO);
     }
+    public void deleteComment(CommentDTO commentDTO) { commentDAO.deleteComment(commentDTO);}
     public List<CommentDTO> getComment(Integer bno) { return commentDAO.getComment(bno); }
 }

@@ -21,15 +21,17 @@ public class BoardService
     {
         return dao.getBoard(bno);
     }
-
     public String getWriter(Integer bno)
     {
         return dao.getWriter(bno);
     }
-
     public List<BoardDTO> getBoardList()
     {
         return dao.getBoardList();
+    }
+    public List<BoardDTO> myBoardList(Integer uno)
+    {
+        return dao.myBoardList(uno);
     }
     public String isWriter(BoardDTO dto)
     {

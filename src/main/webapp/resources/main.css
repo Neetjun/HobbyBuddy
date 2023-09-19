@@ -476,7 +476,88 @@ boardForm.jsp
 {
     font-size: 16pt;
     font-weight: bold;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
 }
+
+#commentList
+{
+    width: 1000px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-top: 2px solid darkgray;
+    border-bottom: 2px solid darkgray;
+}
+
+.cmtItem
+{
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid darkgray;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.profile
+{
+    margin-top: 20px;
+    width: 600px;
+}
+
+.profile-image
+{
+    float: left;
+}
+
+.profile > div > img
+{
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+
+#cWriter
+{
+    font-weight: bold;
+    font-size: 10pt;
+    font-family: 나눔고딕;
+}
+
+#reply
+{
+    margin-top: 5px;
+    font-weight: bold;
+    color: darkgray;
+    font-size: 8pt;
+}
+
+#reply > span:hover
+{
+    cursor: pointer;
+}
+#cDate
+{
+    margin-top: 5px;
+    font-size: 8pt;
+    font-weight: bold;
+    color: darkgray;
+}
+
+.cDelete
+{
+    width: 45px;
+    height: 25px;
+    margin-left: 950px;
+}
+
+#cLoginReq
+{
+    font-size: 12pt;
+    margin-left: 350px;
+    margin-top: 85px;
+}
+
 .comment-area > form
 {
     display: flex;

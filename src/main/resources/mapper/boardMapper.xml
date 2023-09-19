@@ -18,11 +18,19 @@
 
     <select id="getBoardList" resultType="BoardDTO">
         <include refid="selectAll"/>
+--         WHERE BNO NOT IN (SELECT BNO FROM DELETED_BOARD) 이 구문 유무에 따라 속도차이 엄청 심하다. 왜지?
+        WHERE NOT EXISTS (SELECT BNO FROM DELETED_BOARD WHERE BNO = BOARD.BNO)
     </select>
 
     <select id="getBoard" parameterType="int" resultType="boardDTO">
         <include refid="selectAll"/>
         WHERE BNO = ${bno}
+    </select>
+
+    <select id="myBoardList" parameterType="int" resultType="boardDTO">
+        <include refid="selectAll"></include>
+        WHERE B_UNO = ${uno}
+        ORDER BY BNO DESC
     </select>
 
     <select id="getWriter" parameterType="int" resultType="String">
@@ -38,11 +46,9 @@
         WHERE UNO = ${b_uno}
     </select>
 
-    <delete id="deleteBoard" parameterType="BoardDTO">
-        DELETE
-        FROM BOARD
-        WHERE BNO = ${bno}
-    </delete>
+    <insert id="deleteBoard" parameterType="BoardDTO">
+        INSERT INTO DELETED_BOARD VALUES (${bno})
+    </insert>
 
     <update id="updateBoard" parameterType="BoardDTO">
         UPDATE BOARD

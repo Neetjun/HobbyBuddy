@@ -18,6 +18,8 @@
         let id = "${sessionScope.get('id')}";
         let nickname = "${sessionScope.get('nickname')}";
         let contextRoot = "<c:url value='/'/>";
+        let contextPath = "<c:out value='${pageContext.request.contextPath}'/>";
+        let uno = "${sessionScope.get('uno')}";
     </script>
     <script type="text/javascript" src="<c:out value='${pageContext.request.contextPath}'/>/resources/main.js"></script>
 </head>
@@ -73,23 +75,34 @@
         </div>
     </form>
 
-    <div class="comment-area">
-        <span>덧글</span>
+    <c:if test="${type eq 'read'}">
+        <div class="comment-area">
+            <span>덧글</span>
 
-        <%-- 덧글목록 --%>
-        <div id="commentList">
+            <%-- 덧글목록 --%>
+            <div id="commentList">
+                <form action="<c:url value="/comment"/>" method="post">
 
+                </form>
+
+            </div>
+
+            <c:choose>
+                <c:when test="${sessionScope.get('id') ne null}">
+                    <%-- 덧글입력창 --%>
+                    <form action="<c:url value="/comment"/>" method="post">
+                        <textarea id="cInput" placeholder="깨끗한 덧글 문화를 유지합시다." name="c_content"></textarea>
+                        <input type="hidden" name="c_bno" value="${boardDTO.bno}">
+                        <input type="hidden" name="c_uno" value="${sessionScope.get("uno")}">
+                        <button type="button" class="submitBtn" id="cSubmit">등록</button>
+                    </form>
+                </c:when>
+                <c:otherwise>
+                    <span id="cLoginReq">덧글은 로그인 후 입력이 가능합니다!</span>
+                </c:otherwise>
+            </c:choose>
         </div>
-
-        <%-- 덧글입력창 --%>
-        <form action="<c:url value="/comment"/>" method="post">
-            <textarea id="cInput" placeholder="깨끗한 덧글 문화를 유지합시다." name="c_content"></textarea>
-            <input type="hidden" name="c_bno" value="${boardDTO.bno}">
-            <input type="hidden" name="c_uno" value="${sessionScope.get("uno")}">
-            <button type="button" class="submitBtn" id="cSubmit">등록</button>
-        </form>
-    </div>
-
+    </c:if>
 
     <%-- 헤더 메뉴 전용 모달창 --%>
     <div class="modal">

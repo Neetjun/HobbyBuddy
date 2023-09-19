@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -20,27 +21,27 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("")
-    public String postComment(CommentDTO commentDTO, Model m)
+    public String postComment(CommentDTO commentDTO, Model m, HttpServletRequest request)
     {
+        // cno가 null이면 댓글등록, 아니면 삭제
+        if(commentDTO.getCno() == null)
+            commentService.postComment(commentDTO);
+        else
+            commentService.deleteComment(commentDTO);
 
-        System.out.println("commentDTO = " + commentDTO);
-
-        // 덧글 등록
-        commentService.postComment(commentDTO);
-        
         // 덧글을 달았던 게시글로 이동
-        return "redirect:/board/"+commentDTO.getC_bno();
+        return "redirect:"+request.getHeader("referer");
     }
 
     @GetMapping("")
     @ResponseBody
     public List<CommentDTO> getComment(Integer bno, Model m)
     {
-        System.out.println("bno = " + bno);
 
         List<CommentDTO> cmtList = commentService.getComment(bno);
 
-        System.out.println("cmtList = " + cmtList);
+        for(CommentDTO dto : cmtList)
+            dto.setC_content(dto.getC_content().replaceAll("\r\n","<br/>"));
 
         return cmtList;
     }

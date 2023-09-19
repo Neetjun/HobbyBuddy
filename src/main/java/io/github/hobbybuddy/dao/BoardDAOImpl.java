@@ -34,6 +34,11 @@ public class BoardDAOImpl implements BoardDAO {
         return session.selectList(namespace+"getBoardList");
     }
     @Override
+    public List<BoardDTO> myBoardList(Integer uno)
+    {
+        return session.selectList(namespace+"myBoardList",uno);
+    }
+    @Override
     public String isWriter(BoardDTO dto) { return session.selectOne(namespace+"isWriter",dto); }
     @Override
     public void deleteBoard(BoardDTO dto) {session.delete(namespace+"deleteBoard",dto);};

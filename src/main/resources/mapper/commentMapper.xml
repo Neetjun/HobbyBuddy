@@ -17,4 +17,10 @@
         WHERE C_BNO = ${bno}
     </select>
 
+    <delete id="deleteCmt" parameterType="commentDTO">
+        DELETE
+        FROM CMT
+        WHERE CNO = ${cno}
+    </delete>
+
 </mapper>

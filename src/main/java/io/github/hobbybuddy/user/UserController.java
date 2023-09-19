@@ -3,11 +3,13 @@ package io.github.hobbybuddy.user;
 import io.github.hobbybuddy.domain.UserDTO;
 import io.github.hobbybuddy.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
@@ -45,7 +47,7 @@ public class UserController
 
     // 로그인
     @GetMapping("")
-    public String login(UserDTO user, Model m, RedirectAttributes ra, HttpSession session)
+    public String login(UserDTO user, Model m, RedirectAttributes ra, HttpSession session, HttpServletRequest request)
     {
         // 입력받은 id, pw를 통해 유저 정보 입력
         user = userService.loginUser(user);
@@ -60,17 +62,18 @@ public class UserController
         else
             ra.addFlashAttribute("loginCheck","fail");
 
-        System.out.println("user = " + user);
+        String goTo = request.getHeader("Referer");
 
-        return "redirect:/";
+        return "redirect:" + goTo;
     }
 
     // 로그아웃
     @GetMapping("/logout")
-    public String logout(HttpSession session)
+    public String logout(HttpSession session, HttpServletRequest request)
     {
         session.invalidate();
-        return "redirect:/";
+        String goTo = (String)request.getHeader("Referer");
+        return "redirect:" + goTo;
     }
 
     // 아이디 중복검사

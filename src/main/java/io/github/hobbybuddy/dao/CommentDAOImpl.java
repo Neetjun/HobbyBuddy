@@ -19,6 +19,13 @@ public class CommentDAOImpl implements CommentDAO {
     {
         session.insert(namespace+"postCmt",commentDTO);
     }
+    @Override
+    public void deleteComment(CommentDTO commentDTO)
+    {
+        session.delete(namespace+"deleteCmt",commentDTO);
+    }
+    @Override
     public List<CommentDTO> getComment(Integer bno) { return session.selectList(namespace+"getCmt",bno); }
+
 
 }

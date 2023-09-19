@@ -271,7 +271,6 @@ $(document).ready(function () {
             let formObj = $(this).parent().parent().parent();
             let bno = $("#bno").val();
             formObj.attr("action",contextRoot+"board/" + bno + "?mod=delete");
-            alert(formObj.attr("method"));
             formObj.submit();
         }
         else
@@ -304,6 +303,9 @@ $(document).ready(function () {
         $(this).css("display","none");
         $(this).parent().prepend("<button id='uCancel' class='cancel' type='button'>취소</button>");
         $(this).parent().prepend("<button id='bUpdate' type='button'>수정</button> ");
+        
+        // 덧글 영역 감추기
+        $(".comment-area").css("display","none");
     });
 
     // 게시글 수정하기
@@ -357,17 +359,36 @@ $(document).ready(function () {
 
             for(let i = 0; i < cmtList.length; i++)
             {
+                let hidden = cmtList[i].c_uno == uno ? "" : "hidden='hidden'";
                 html += "<div class='cmtItem'>";
-                html += cmtList[i].c_content;
+                // 덧글 내용
+                html += "<div id='c-content'>"+cmtList[i].c_content+"</div>";
+                // 덧글 프로필
+                html += "<div id='c-profile' class='profile'>";
+                html += "<div class='profile-image'><img src="+contextPath+"/resources/image/profile.jpeg/></div>";
+                html += "<div id='cWriter'>닉네임</div>"
+                html += "<div id='cDate'>"+cmtList[i].c_reg_date+"</div>"
+                html += "<div id='reply'><span>답글쓰기</span></div>"
+                html += "</div>";
+                //덧글 삭제버튼
+                html += "<button type='button' class='cancel cDelete' value='"+ cmtList[i].cno +"'"+ hidden +">삭제</button>";
                 html += "</div>";
             }
 
-            console.log(html);
-
-            $("#commentList").html(html);
+            html += "<input name='cno' hidden='hidden'/>"
+            $("#commentList > form").html(html);
         })
         , error : (function (request) {
             console.log(request.responseText);
         })
+    });
+
+    // 덧글 삭제
+    $(document).on("click", ".cDelete", function () {
+        // 인풋태그에 해당 버튼의 value (cno)값 넘기기
+        $(this).parent().parent().children("input").val($(this).val());
+
+        // form태그 제출
+        $(this).parent().parent().submit();
     });
 });

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class BoardController {
 
     // 게시판 등록
     @PostMapping("")
-    public String postBoard(BoardDTO dto, Model m, HttpSession session)
+    public String postBoard(BoardDTO dto, Model m, HttpSession session, HttpServletRequest request)
     {
         // dto 객체에 유저번호(작성자) 삽입
         Integer uno = (Integer)session.getAttribute("uno");
@@ -38,7 +39,16 @@ public class BoardController {
         // 게시판 DB 입력
         boardService.postBoard(dto);
 
-        return "redirect:/";
+        int bno = 0;
+
+        List<BoardDTO> myBoard = boardService.myBoardList(uno);
+
+        // 내 작성글의 마지막 글(방금 작성한글)의 bno 얻기
+        bno = myBoard.get(0).getBno();
+
+        String goTo = "/board/" + bno;
+
+        return "redirect:" + goTo;
     }
 
     // 게시글 읽기
