@@ -62,6 +62,8 @@ public class UserController
         else
             ra.addFlashAttribute("loginCheck","fail");
 
+
+
         String goTo = request.getHeader("Referer");
 
         return "redirect:" + goTo;

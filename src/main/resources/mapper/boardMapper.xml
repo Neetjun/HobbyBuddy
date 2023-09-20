@@ -20,6 +20,7 @@
         <include refid="selectAll"/>
 --         WHERE BNO NOT IN (SELECT BNO FROM DELETED_BOARD) 이 구문 유무에 따라 속도차이 엄청 심하다. 왜지?
         WHERE NOT EXISTS (SELECT BNO FROM DELETED_BOARD WHERE BNO = BOARD.BNO)
+        ORDER BY BNO DESC
     </select>
 
     <select id="getBoard" parameterType="int" resultType="boardDTO">

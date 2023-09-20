@@ -47,7 +47,7 @@ $(document).ready(function () {
     });
 
     /* 아이디 중복검사 */
-    $("#id > input").on("keyup", function () {
+    $("#id > input").on("keydown", function () {
         $.ajax({
             type: "GET",
             url: contextRoot+"user/dupCheck",
@@ -87,7 +87,7 @@ $(document).ready(function () {
                     $("#pw").css("marginTop","0");
                 }
             },
-            error: function (request) {$("#dupCheck").text("Err");}
+            error: function (request) {$("#dupCheck").text(this.error);}
         });
     });
 
@@ -357,23 +357,31 @@ $(document).ready(function () {
 
             let html = "";
 
-            for(let i = 0; i < cmtList.length; i++)
+            if(cmtList.length != 0)
+                for(let i = 0; i < cmtList.length; i++)
+                {
+                    let hidden = cmtList[i].c_uno == uno ? "" : "hidden='hidden'";
+                    html += "<div class='cmtItem'>";
+                    // 덧글 내용
+                    html += "<div id='c-content'>"+cmtList[i].c_content+"</div>";
+                    // 덧글 프로필
+                    html += "<div id='c-profile' class='profile'>";
+                    html += "<div class='profile-image'><img src="+contextPath+"/resources/image/profile.jpeg/></div>";
+                    html += "<div id='cWriter'>"+cmtList[i].nickname+"</div>"
+                    html += "<div id='cDate'>"+cmtList[i].c_reg_date+"</div>"
+                    html += "<div id='reply'><span>답글쓰기</span></div>"
+                    html += "</div>";
+                    //덧글 삭제버튼
+                    html += "<button type='button' class='cancel cDelete' value='"+ cmtList[i].cno +"'"+ hidden +">삭제</button>";
+                    html += "</div>";
+                }
+            else
             {
-                let hidden = cmtList[i].c_uno == uno ? "" : "hidden='hidden'";
-                html += "<div class='cmtItem'>";
-                // 덧글 내용
-                html += "<div id='c-content'>"+cmtList[i].c_content+"</div>";
-                // 덧글 프로필
-                html += "<div id='c-profile' class='profile'>";
-                html += "<div class='profile-image'><img src="+contextPath+"/resources/image/profile.jpeg/></div>";
-                html += "<div id='cWriter'>닉네임</div>"
-                html += "<div id='cDate'>"+cmtList[i].c_reg_date+"</div>"
-                html += "<div id='reply'><span>답글쓰기</span></div>"
-                html += "</div>";
-                //덧글 삭제버튼
-                html += "<button type='button' class='cancel cDelete' value='"+ cmtList[i].cno +"'"+ hidden +">삭제</button>";
-                html += "</div>";
+                html += "<div id='noComment'>등록된 덧글이 없습니다.</div>";
             }
+
+
+
 
             html += "<input name='cno' hidden='hidden'/>"
             $("#commentList > form").html(html);

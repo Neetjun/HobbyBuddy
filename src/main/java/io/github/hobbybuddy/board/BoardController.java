@@ -35,6 +35,8 @@ public class BoardController {
         // dto 객체에 유저번호(작성자) 삽입
         Integer uno = (Integer)session.getAttribute("uno");
         dto.setB_uno(uno);
+        dto.setB_content(dto.getB_content().replaceAll("<div><br></div>","\n")
+                .replaceAll("^\\s+|\\s+$",""));
 
         // 게시판 DB 입력
         boardService.postBoard(dto);
@@ -67,6 +69,8 @@ public class BoardController {
         // isWriter 쿼리문이 필요가 없지 않나??
            boolean isWriter = dto.getB_uno() == (Integer)session.getAttribute("uno");
 
+        dto.setB_content(dto.getB_content().replaceAll("\n","<div><br></div>"));
+
         m.addAttribute("type", "read");
         m.addAttribute("isWriter",isWriter);
         m.addAttribute("writer",boardService.getWriter(dto.getBno()));
@@ -82,12 +86,16 @@ public class BoardController {
         if(mod.equals("delete"))
         {
             boardService.deleteBoard(dto);
+
             return "redirect:/";
         }
         else
         {
-            System.out.println("dto = " + dto);
+            dto.setB_content(dto.getB_content().replaceAll("<div><br></div>","\n")
+                    .replaceAll("^\\s+|\\s+$",""));
+
             boardService.updateBoard(dto);
+
             return "redirect:/board/"+bno;
         }
 

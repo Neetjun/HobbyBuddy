@@ -81,7 +81,7 @@
     </div>
     <%-- 로그인 및 회원가입 모달창 영역 끝 --%>
 
-    <%-- 회원가입 성공 여부 확인 --%>
+    <%-- 회원가입 및 로그인 성공 여부 확인 --%>
     <input type="hidden" id="regCheck" value="${regResult}">
     <input type="hidden" id="loginCheck" value="${loginCheck}">
 </body>

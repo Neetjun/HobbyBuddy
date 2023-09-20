@@ -6,7 +6,18 @@ public class CommentDTO
 {
     private Integer cno, tcno, c_uno, c_bno;
     private String c_content;
-    private Date c_reg_date;
+    private String c_reg_date;
+    private String nickname;
+
+
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
 
     @Override
     public String toString() {
@@ -70,11 +81,11 @@ public class CommentDTO
         this.c_content = c_content;
     }
 
-    public Date getC_reg_date() {
+    public String getC_reg_date() {
         return c_reg_date;
     }
 
-    public void setC_reg_date(Date c_reg_date) {
+    public void setC_reg_date(String c_reg_date) {
         this.c_reg_date = c_reg_date;
     }
 }

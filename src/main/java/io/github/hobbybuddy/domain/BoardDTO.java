@@ -6,7 +6,7 @@ public class BoardDTO
 {
     private Integer bno, b_uno, like_count, view_count;
     private String title, b_content;
-    private Date b_reg_date, u_date;
+    private String b_reg_date, u_date;
 
     @Override
     public String toString() {
@@ -76,19 +76,19 @@ public class BoardDTO
         this.b_content = b_content;
     }
 
-    public Date getB_reg_date() {
+    public String getB_reg_date() {
         return b_reg_date;
     }
 
-    public void setB_reg_date(Date b_reg_date) {
+    public void setB_reg_date(String b_reg_date) {
         this.b_reg_date = b_reg_date;
     }
 
-    public Date getU_date() {
+    public String getU_date() {
         return u_date;
     }
 
-    public void setU_date(Date u_date) {
+    public void setU_date(String u_date) {
         this.u_date = u_date;
     }
 }
