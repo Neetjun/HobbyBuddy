@@ -1,5 +1,6 @@
 package io.github.hobbybuddy.board;
 
+import io.github.hobbybuddy.Util.PagingHandler;
 import io.github.hobbybuddy.domain.BoardDTO;
 import io.github.hobbybuddy.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class BoardController {
 
     // 게시판 등록
     @PostMapping("")
-    public String postBoard(BoardDTO dto, Model m, HttpSession session, HttpServletRequest request)
+    public String postBoard(BoardDTO dto, Model m, HttpSession session)
     {
         // dto 객체에 유저번호(작성자) 삽입
         Integer uno = (Integer)session.getAttribute("uno");
@@ -108,6 +109,11 @@ public class BoardController {
     {
         System.out.println("작동확인");
         System.out.println("paging = " + paging);
+
+        PagingHandler ph = new PagingHandler(paging);
+
+        System.out.println("ph = " + ph);
+
         List<BoardDTO> list = boardService.getBoardList();
 
         return list;

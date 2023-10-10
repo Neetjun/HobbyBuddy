@@ -47,7 +47,7 @@ $(document).ready(function () {
     });
 
     /* 아이디 중복검사 */
-    $("#id > input").on("keydown", function () {
+    $("#id > input").on("blur", function () {
         $.ajax({
             type: "GET",
             url: contextRoot+"user/dupCheck",
@@ -172,6 +172,7 @@ $(document).ready(function () {
             {
                 $(".boardList").html("");
 
+                // 게시판 목록 출력햐기
                 for(let i = 0; i < list.length; i++)
                 {
                     let item = "<div class='boardItem'>";
@@ -191,6 +192,8 @@ $(document).ready(function () {
                     item += "</div>"; // boardItem 끝
                     $(".boardList").append(item);
                 }
+
+                // 페이징 처리
             }
             else
             {

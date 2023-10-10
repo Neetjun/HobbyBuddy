@@ -15,14 +15,15 @@
         SELECT CNO, C_CONTENT, C_REG_DATE, TCNO, C_UNO, C_BNO, NICKNAME
         FROM CMT C JOIN USERINFO U
         ON C.C_UNO = U.UNO
-        WHERE C_BNO = ${bno}
+        WHERE 1=1
+          AND C_BNO = ${bno}
+          AND NOT EXISTS(SELECT 1 FROM DEL_CMT WHERE CNO = C.CNO)
         ORDER BY C_REG_DATE
     </select>
 
     <delete id="deleteCmt" parameterType="commentDTO">
-        DELETE
-        FROM CMT
-        WHERE CNO = ${cno}
+        INSERT INTO DEL_CMT
+        VALUES(${cno})
     </delete>
 
 </mapper>

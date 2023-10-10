@@ -110,7 +110,7 @@ button
     margin: 0 auto;
     display: flex;
     justify-content: space-between;
-    width: 1000px;
+    width: 980px;
 }
 
 #myItems
@@ -153,8 +153,8 @@ label
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
-    width: 1000px;
-    padding-left: 90px;
+    width: 1050px;
+    padding-left: 60px;
     margin: 0 auto;
 }
 
