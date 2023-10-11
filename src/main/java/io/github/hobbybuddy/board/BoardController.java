@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -105,17 +106,22 @@ public class BoardController {
     //게시판 목록
     @ResponseBody
     @GetMapping("/list")
-    public List<BoardDTO> getBoardList(@RequestParam Map<String,String> paging)
+    public HashMap<String,Object> getBoardList(@RequestParam Map<String,String> paging)
     {
         System.out.println("작동확인");
         System.out.println("paging = " + paging);
 
+        List<BoardDTO> list = boardService.getBoardList();
+        paging.put("boardCnt",String.valueOf(list.size()));
         PagingHandler ph = new PagingHandler(paging);
+        System.out.println("list.size() = " + Math.ceil(list.size()/12.0));
+        HashMap<String, Object> objMap = new HashMap<String, Object>();
+
+        objMap.put("list",list);
+        objMap.put("ph", ph);
 
         System.out.println("ph = " + ph);
 
-        List<BoardDTO> list = boardService.getBoardList();
-
-        return list;
+        return objMap;
     }
 }

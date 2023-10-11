@@ -230,7 +230,28 @@ label
 
 #pages
 {
-    margin-top: 100px;
+    margin-top: 60px;
+}
+
+#pages > span
+{
+    margin-left: 10px;
+}
+
+#pages > span, i
+{
+    cursor: pointer;
+}
+
+#curPage
+{
+    font-weight: bold;
+    color: blue;
+}
+
+#nextPage
+{
+    margin-left: 10px;
 }
 
 #writeBtnDiv > button

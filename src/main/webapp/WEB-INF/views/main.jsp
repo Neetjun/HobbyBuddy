@@ -67,10 +67,8 @@
     <div class="paging">
         <div></div>
 
-        <div id="pages">
-           < 1 2 3 4 5 6 7 8 9 10 >
-            <input type="text" id="page" hidden="hidden" value="1">
-        </div>
+        <div id="pages"></div>
+        <input type="text" id="page" hidden="hidden" value="1">
         <div id="writeBtnDiv"></div>
     </div>
     <%-- 글쓰기 버튼 및 페이지 영역 끝--%>

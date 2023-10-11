@@ -20,7 +20,7 @@ public class BoardDAOImplTest extends TestCase {
     @Test
     public void testPostBoard() {
 
-        for(int i = 1; i <= 16; i++)
+        for(int i = 1; i <= 3400; i++)
         {
             BoardDTO dto = new BoardDTO(1,"test"+i,"test"+i);
             dao.postBoard(dto);

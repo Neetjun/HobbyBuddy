@@ -163,48 +163,91 @@ $(document).ready(function () {
     });
 
     // 게시글 목록 불러오기 ajax
-    $.ajax({
-        type : "GET"
-        , url : contextRoot+"board/list"
-        , data: {"page":$("#page").val(),"keyword":$("#keyword").val(),"option":$("#option").val()}
-        , success : function (list) {
-            if(list.length != 0)
-            {
-                $(".boardList").html("");
+    function bList()
+    {
+        $.ajax({
+            type : "GET"
+            , url : contextRoot+"board/list"
+            , data: {"page":$("#page").val(),"keyword":$("#keyword").val(),"option":$("#option").val()}
+            , success : function (objMap) {
+                let list = objMap.list;
+                let ph = objMap.ph;
 
-                // 게시판 목록 출력햐기
-                for(let i = 0; i < list.length; i++)
+                if(list.length != 0)
                 {
-                    let item = "<div class='boardItem'>";
-                    item += "<div class='Thumbnail'>" + "Hobby Buddy" + "</div>";
-                    item += "<div class='titleAndInfo'>";
-                    item += "<div class='itemTitle'>" + list[i].title + "</div>";
-                    item += "<div class='itemInfo'>"
-                    + "<i class='fa-solid fa-thumbs-up'></i>"
-                    + "<span>" + list[i].like_count + "</span>"
-                    + "<i class='fa-solid fa-comment'></i>"
-                    + "<span>" + 0 + "</span>"
-                    + "<i class='fa-solid fa-eye'></i>"
-                    + "<span>" + list[i].view_count + "</span>";
-                    item += "</div>" // itemInfo 끝
-                    item += "</div>" // titleAndInfo 끝
-                    item += "<input hidden='hidden' value='" + list[i].bno + "'/>"
-                    item += "</div>"; // boardItem 끝
-                    $(".boardList").append(item);
+                    $(".boardList").html("");
+
+                    // 게시판 목록 출력햐기
+                    for(let i = ph.startList; i <= ph.endList; i++)
+                    {
+                        let item = "<div class='boardItem'>";
+                        item += "<div class='Thumbnail'>" + "Hobby Buddy" + "</div>";
+                        item += "<div class='titleAndInfo'>";
+                        item += "<div class='itemTitle'>" + list[i].title + "</div>";
+                        item += "<div class='itemInfo'>"
+                            + "<i class='fa-solid fa-thumbs-up'></i>"
+                            + "<span>" + list[i].like_count + "</span>"
+                            + "<i class='fa-solid fa-comment'></i>"
+                            + "<span>" + 0 + "</span>"
+                            + "<i class='fa-solid fa-eye'></i>"
+                            + "<span>" + list[i].view_count + "</span>";
+                        item += "</div>" // itemInfo 끝
+                        item += "</div>" // titleAndInfo 끝
+                        item += "<input hidden='hidden' value='" + list[i].bno + "'/>"
+                        item += "</div>"; // boardItem 끝
+                        $(".boardList").append(item);
+                    }
+
+                    // 페이징 처리
+                    $("#page").val(ph.page);
+                    let pages = "";
+                    if(ph.startPage > 10)
+                        pages += "<i class=\'fa-solid fa-angle-left\' id='"+ph.prevPageStart+"' tgt='prev'></i>";
+
+                    for(let j = ph.startPage; j <= ph.endPage; j++)
+                    {
+                        if(j == $("#page").val())
+                            pages += "<span id='curPage'>" + j + "</span>";
+                        else
+                            pages += "<span id='"+j+"'>" + j + "</span>";
+                    }
+
+                    if(ph.totPage > 10)
+                        pages += "<i class=\"fa-solid fa-angle-right\" id='"+ph.nextPageStart+"' tgt='next'></i>";
+                    $("#pages").html(pages);
+                }
+                else
+                {
+                    $(".boardList").css("justifyContent","center");
+                    $("#noItem").removeAttr("hidden");
                 }
 
-                // 페이징 처리
             }
-            else
-            {
-                $(".boardList").css("justifyContent","center");
-                $("#noItem").removeAttr("hidden");
+            , error : function (request, status, error) {
+                alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
             }
+        });
+    }
 
-        }
-        , error : function (request, status, error) {
-            alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-        }
+    bList();
+
+    // 게시글 페이지 이동
+    $(document).on("click", "#pages > span", function (){
+        if($(this).attr("id") == "curPage")
+            return;
+
+        let newPage = $(this).attr("id");
+        $("#page").val(newPage);
+        $("#curPage").attr("id",$("#curPage").text());
+        $(this).attr("id","curPage");
+        bList();
+    });
+
+    // 게시글 페이지 목록 변경 (ex : 1 ~ 10 -> 11 ~ 20)
+    $(document).on("click", "#pages > i", function () {
+        let newPage = $(this).attr("id");
+        $("#page").val(newPage);
+        bList();
     })
 
     // 게시글 읽기
