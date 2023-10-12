@@ -102,16 +102,20 @@ public class PagingHandler
         page = Integer.parseInt(map.get("page"));
         boardCnt = Integer.parseInt((map.get("boardCnt")));
         totPage = (int)Math.ceil(boardCnt/12.0);
-        startPage = page/10 * 10 + 1;
+        startPage = (page-1)/10 * 10 + 1;
         endPage = startPage + 9;
 
         if(endPage >= totPage)
             endPage = totPage;
 
-        startList = page == 1 ? 1 : 12 * (page-1) + (page-1);
-        endList = page * 12 + (page-1);
-        nextPageStart = (page/10 + 1) * 10 + 1;
-        prevPageStart = (page/10 - 2) * 10 + 1;
+        startList = 12 * (page-1) + 1;
+        endList = 12 * page;
+
+        if(boardCnt < 12)
+            endList = boardCnt;
+
+        nextPageStart = ((page-1)/10 + 1) * 10 + 1;
+        prevPageStart = ((page-1)/10 - 1) * 10 + 10;
 
         if(prevPageStart < 0)
             prevPageStart = 1;

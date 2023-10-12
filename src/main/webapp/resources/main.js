@@ -168,17 +168,20 @@ $(document).ready(function () {
         $.ajax({
             type : "GET"
             , url : contextRoot+"board/list"
-            , data: {"page":$("#page").val(),"keyword":$("#keyword").val(),"option":$("#option").val()}
+            , data: {"page":$("#page").val(),"keyword":$("#keyword").val(),"search":$("#option").val(), "sort":$("#sort").val()}
             , success : function (objMap) {
                 let list = objMap.list;
                 let ph = objMap.ph;
+
+                // 결과없음 -> 결과있음의 경우 배열 기준을 flex-center에서 flax-start로 변경
+                $(".boardList").css("justifyContent","flex-start");
 
                 if(list.length != 0)
                 {
                     $(".boardList").html("");
 
-                    // 게시판 목록 출력햐기
-                    for(let i = ph.startList; i <= ph.endList; i++)
+                    // 게시판 목록 출력하기
+                    for(let i = ph.startList-1; i < ph.endList; i++)
                     {
                         let item = "<div class='boardItem'>";
                         item += "<div class='Thumbnail'>" + "Hobby Buddy" + "</div>";
@@ -202,7 +205,7 @@ $(document).ready(function () {
                     $("#page").val(ph.page);
                     let pages = "";
                     if(ph.startPage > 10)
-                        pages += "<i class=\'fa-solid fa-angle-left\' id='"+ph.prevPageStart+"' tgt='prev'></i>";
+                        pages += "<i class=\'fa-solid fa-angle-left\' id='"+ph.prevPageStart+"'></i>";
 
                     for(let j = ph.startPage; j <= ph.endPage; j++)
                     {
@@ -212,12 +215,13 @@ $(document).ready(function () {
                             pages += "<span id='"+j+"'>" + j + "</span>";
                     }
 
-                    if(ph.totPage > 10)
-                        pages += "<i class=\"fa-solid fa-angle-right\" id='"+ph.nextPageStart+"' tgt='next'></i>";
+                    if(ph.totPage > 10 && ph.totPage != ph.endPage)
+                        pages += "<i class=\"fa-solid fa-angle-right\" id='"+ph.nextPageStart+"'></i>";
                     $("#pages").html(pages);
                 }
                 else
                 {
+                    $(".boardList").html($(".boardList").next().html()); // noItem을 감싸고있는 Div의 html 내용 가져오기
                     $(".boardList").css("justifyContent","center");
                     $("#noItem").removeAttr("hidden");
                 }
@@ -228,8 +232,16 @@ $(document).ready(function () {
             }
         });
     }
-
     bList();
+
+    // 게시글 검색
+    $("#searchInput > button").click(function ()
+    {
+        // alert($("#keyword").val());
+        // alert($("#option").val());
+        // alert($("#sort").val());
+        bList();
+    });
 
     // 게시글 페이지 이동
     $(document).on("click", "#pages > span", function (){
@@ -256,6 +268,11 @@ $(document).ready(function () {
     $(document).on("click", ".boardItem", function () {
         let bno = $(this).children("input").val()
         window.location.href = contextRoot+"board/"+bno;
+    });
+
+    $("#sort").change(function ()
+    {
+        bList();
     });
 
     /* ----- BoardForm.jsp -------- */
@@ -395,6 +412,7 @@ $(document).ready(function () {
     });
 
     // 덧글 가져오기
+    // if(contextRoot == "comment/")
     $.ajax({
         type : "GET"
         , url : contextRoot+"comment"
@@ -406,6 +424,8 @@ $(document).ready(function () {
             if(cmtList.length != 0)
                 for(let i = 0; i < cmtList.length; i++)
                 {
+                    if(uno == null)
+                        uno = -1;
                     let hidden = cmtList[i].c_uno == uno ? "" : "hidden='hidden'";
                     html += "<div class='cmtItem'>";
                     // 덧글 내용

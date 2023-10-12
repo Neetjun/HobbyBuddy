@@ -38,6 +38,8 @@ public class CommentController {
     @ResponseBody
     public List<CommentDTO> getComment(Integer bno, Model m)
     {
+        if(bno == null)
+            bno = -1;
 
         List<CommentDTO> cmtList = commentService.getComment(bno);
 

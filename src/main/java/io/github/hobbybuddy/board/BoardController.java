@@ -106,21 +106,22 @@ public class BoardController {
     //게시판 목록
     @ResponseBody
     @GetMapping("/list")
-    public HashMap<String,Object> getBoardList(@RequestParam Map<String,String> paging)
+    public HashMap<String,Object> getBoardList(@RequestParam HashMap<String,String> paging)
     {
-        System.out.println("작동확인");
+        List<BoardDTO> list = boardService.getBoardList(paging);
+        paging.put("boardCnt",String.valueOf(list.size()));
+
         System.out.println("paging = " + paging);
 
-        List<BoardDTO> list = boardService.getBoardList();
-        paging.put("boardCnt",String.valueOf(list.size()));
         PagingHandler ph = new PagingHandler(paging);
-        System.out.println("list.size() = " + Math.ceil(list.size()/12.0));
         HashMap<String, Object> objMap = new HashMap<String, Object>();
+
+        System.out.println("ph = " + ph);
+        System.out.println("list = " + list);
+        System.out.println("list.size() = " + list.size());
 
         objMap.put("list",list);
         objMap.put("ph", ph);
-
-        System.out.println("ph = " + ph);
 
         return objMap;
     }

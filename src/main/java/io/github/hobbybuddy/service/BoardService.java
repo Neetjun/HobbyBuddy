@@ -5,7 +5,9 @@ import io.github.hobbybuddy.domain.BoardDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class BoardService
@@ -25,9 +27,9 @@ public class BoardService
     {
         return dao.getWriter(bno);
     }
-    public List<BoardDTO> getBoardList()
+    public List<BoardDTO> getBoardList(HashMap<String,String> map)
     {
-        return dao.getBoardList();
+        return dao.getBoardList(map);
     }
     public List<BoardDTO> myBoardList(Integer uno)
     {

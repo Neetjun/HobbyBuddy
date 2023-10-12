@@ -119,12 +119,12 @@ button
     font-weight: bold;
 }
 
-#sort
+#sortArea
 {
     text-align: right;
 }
 
-#sort > select
+#sortArea > select
 {
     border: black 2px solid;
     width: 100px;
@@ -236,6 +236,7 @@ label
 #pages > span
 {
     margin-left: 10px;
+    margin-right: 10px;
 }
 
 #pages > span, i
@@ -247,11 +248,6 @@ label
 {
     font-weight: bold;
     color: blue;
-}
-
-#nextPage
-{
-    margin-left: 10px;
 }
 
 #writeBtnDiv > button

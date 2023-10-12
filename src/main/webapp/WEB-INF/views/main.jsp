@@ -25,7 +25,7 @@
     <c:import url="header.jsp"></c:import>
 
     <%-- 검색창 및 필터 --%>
-    <form action='<c:url value="/board"/>' method="get"/>
+<%--    <form action='<c:url value="/board"/>' method="get"/>--%>
         <div class="search">
             <div id="searchInput">
                 <input type="text" id="keyword" placeholder="검색어를 입력해주세요." name="keyword"/>
@@ -39,28 +39,30 @@
                 </select>
             </div>
         </div>
-    </form>
+<%--    </form>--%>
 
     <div class="myItemAndSort">
         <div id="myItems">
             <input type="checkbox" name="myItem" id="myItem"/> <label for="myItem">내가 쓴 글만 보기</label>
         </div>
 
-        <div id="sort">
-            <select name="sort">
-                <option value="date">최신순</option>
-                <option value="like">좋아요순</option>
+        <div id="sortArea">
+            <select name="sort" id="sort">
+                <option value="bno">최신순</option>
+                <option value="like_count">좋아요순</option>
             </select>
         </div>
     </div>
     <%-- 검색창 및 필터 영역 끝 --%>
 
     <%-- 게시판 영역 --%>
-    <div class="boardList">
+    <div class="boardList"></div>
+    <div>
         <span id="noItem" hidden="hidden">
             게시물이 존재하지 않습니다.
         </span>
     </div>
+
     <%-- 게시판 영역 끝--%>
 
     <%-- 글쓰기 버튼 및 페이지 영역--%>

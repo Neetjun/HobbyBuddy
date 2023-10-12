@@ -16,11 +16,34 @@
         VALUES (SEQ_BNO.NEXTVAL, ${b_uno}, #{title}, #{b_content})
     </insert>
 
-    <select id="getBoardList" resultType="BoardDTO">
+    <select id="getBoardList" parameterType="hashMap" resultType="BoardDTO">
         <include refid="selectAll"/>
 --         WHERE BNO NOT IN (SELECT BNO FROM DELETED_BOARD) 이 구문 유무에 따라 속도차이 엄청 심하다. 왜지?
         WHERE NOT EXISTS (SELECT BNO FROM DELETED_BOARD WHERE BNO = BOARD.BNO)
-        ORDER BY BNO DESC
+        <if test="keyword != ''.toString()">
+            <choose>
+                <when test="search == 'T'.toString()">
+                    AND TITLE LIKE '%'||#{keyword}||'%'
+                </when>
+                <when test="search == 'A'.toString()">
+                    AND TITLE LIKE '%'||#{keyword}||'%'
+                    OR B_CONTENT LIKE '%'||#{keyword}||'%'
+                </when>
+                <when test="search == 'U'.toString()">
+                    AND B_UNO = (SELECT UNO FROM USERINFO WHERE NICKNAME LIKE '%'||#{keyword}||'%')
+                </when>
+            </choose>
+        </if>
+
+        <choose>
+            <when test="sort == bno">
+                ORDER BY BNO DESC
+            </when>
+            <otherwise>
+                ORDER BY LIKE_COUNT DESC, BNO DESC
+            </otherwise>
+        </choose>
+
     </select>
 
     <select id="getBoard" parameterType="int" resultType="boardDTO">

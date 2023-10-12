@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class BoardDAOImpl implements BoardDAO {
@@ -29,9 +31,9 @@ public class BoardDAOImpl implements BoardDAO {
         return session.selectOne(namespace+"getWriter",bno);
     }
     @Override
-    public List<BoardDTO> getBoardList()
+    public List<BoardDTO> getBoardList(HashMap<String, String> map)
     {
-        return session.selectList(namespace+"getBoardList");
+        return session.selectList(namespace+"getBoardList",map);
     }
     @Override
     public List<BoardDTO> myBoardList(Integer uno)
