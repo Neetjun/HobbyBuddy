@@ -55,6 +55,14 @@
                 <textarea name="b_content" hidden="hidden" ></textarea>
             </div>
 
+            <%-- 좋아요 버튼 영역 --%>
+            <c:if test="${type eq 'read'}">
+                <div id="likeBtnArea">
+                    <i class="fa-regular fa-thumbs-up" id="likeBtn"></i>
+                    <span>${boardDTO.like_count}</span>
+                </div>
+            </c:if>
+
             <%-- 게시글 버튼 영역 --%>
             <div id="boardBtn">
                 <c:choose>

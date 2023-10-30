@@ -444,6 +444,27 @@ boardForm.jsp
     margin-left: 760px;
 }
 
+#likeBtnArea
+{
+    text-align: center;
+}
+
+#likeBtn
+{
+    font-size: 35px;
+    color: #2258b4;
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+#likeBtnArea > span
+{
+    font-weight: bold;
+    font-size: 30px;
+    color: darkorange;
+    margin-left: 10px;
+}
+
 #boardBtn
 {
     padding-top: 15px;

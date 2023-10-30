@@ -18,6 +18,7 @@
         let id = "${sessionScope.get('id')}";
         let nickname = "${sessionScope.get('nickname')}";
         let contextRoot = "<c:url value='/'/>";
+        let uno = "${sessionScope.get('uno')}";
     </script>
     <script type="text/javascript" src="<c:out value='${pageContext.request.contextPath}'/>/resources/main.js"></script>
 </head>

@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class BoardDTO
 {
-    private Integer bno, b_uno, like_count, view_count;
+    private Integer bno, b_uno, like_count, view_count, cmt_count;
     private String title, b_content;
     private String b_reg_date, u_date;
 
@@ -13,12 +13,13 @@ public class BoardDTO
         return "BoardDTO{" +
                 "bno=" + bno +
                 ", b_uno=" + b_uno +
-                ", title='" + title + '\'' +
-                ", b_content='" + b_content + '\'' +
                 ", like_count=" + like_count +
                 ", view_count=" + view_count +
-                ", b_reg_date=" + b_reg_date +
-                ", u_date=" + u_date +
+                ", cmt_count=" + cmt_count +
+                ", title='" + title + '\'' +
+                ", b_content='" + b_content + '\'' +
+                ", b_reg_date='" + b_reg_date + '\'' +
+                ", u_date='" + u_date + '\'' +
                 '}';
     }
 
@@ -26,6 +27,14 @@ public class BoardDTO
         this.b_uno = b_uno;
         this.title = title;
         this.b_content = b_content;
+    }
+
+    public Integer getCmt_count() {
+        return cmt_count;
+    }
+
+    public void setCmt_count(Integer cmt_count) {
+        this.cmt_count = cmt_count;
     }
 
     public Integer getLike_count() {

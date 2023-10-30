@@ -41,4 +41,7 @@ public class BoardService
     }
     public void deleteBoard(BoardDTO dto) { dao.deleteBoard(dto); }
     public void updateBoard(BoardDTO dto) { dao.updateBoard(dto); }
+    public int likeCnt(HashMap<String,String> likeMap) {return dao.likeCnt(likeMap);}
+    public void likeContent(HashMap<String,String> likeMap) {dao.likeContent(likeMap);}
+    public void updateLikeCnt(HashMap<String,String> likeMap) {dao.updateLikeCnt(likeMap);}
 }

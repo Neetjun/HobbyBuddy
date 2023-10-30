@@ -32,7 +32,7 @@ public class BoardController {
 
     // 게시판 등록
     @PostMapping("")
-    public String postBoard(BoardDTO dto, Model m, HttpSession session)
+    public String postBoard(BoardDTO dto, HttpSession session)
     {
         // dto 객체에 유저번호(작성자) 삽입
         Integer uno = (Integer)session.getAttribute("uno");
@@ -111,18 +111,34 @@ public class BoardController {
         List<BoardDTO> list = boardService.getBoardList(paging);
         paging.put("boardCnt",String.valueOf(list.size()));
 
-        System.out.println("paging = " + paging);
-
         PagingHandler ph = new PagingHandler(paging);
         HashMap<String, Object> objMap = new HashMap<String, Object>();
-
-        System.out.println("ph = " + ph);
-        System.out.println("list = " + list);
-        System.out.println("list.size() = " + list.size());
 
         objMap.put("list",list);
         objMap.put("ph", ph);
 
+        System.out.println("ph = " + ph);
+
         return objMap;
+    }
+
+    // 게시글 좋아요
+    @ResponseBody
+    @PostMapping("/like")
+    public String likeContent(@RequestParam HashMap<String,String> likeMap)
+    {
+        int cntResult = boardService.likeCnt(likeMap);
+
+        System.out.println("cntResult = " + cntResult);
+
+        if(cntResult == 0)
+        {
+            System.out.println("likeMap = " + likeMap);
+            boardService.likeContent(likeMap);
+            boardService.updateLikeCnt(likeMap);
+            return "success";
+        }
+        else
+            return "fail";
     }
 }

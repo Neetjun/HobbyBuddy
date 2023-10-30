@@ -16,6 +16,23 @@ public class PagingHandler
     private int prevPageStart;
     private int boardCnt;
     private int totPage;
+    String myItem, uno;
+
+    public String getMyItem() {
+        return myItem;
+    }
+
+    public void setMyItem(String myItem) {
+        this.myItem = myItem;
+    }
+
+    public String getUno() {
+        return uno;
+    }
+
+    public void setUno(String uno) {
+        this.uno = uno;
+    }
 
     public Map<String, String> getMap() {
         return map;
@@ -119,12 +136,16 @@ public class PagingHandler
 
         if(prevPageStart < 0)
             prevPageStart = 1;
+
+        myItem = map.get("myItem");
+        uno = map.get("uno");
     }
 
     @Override
     public String toString() {
         return "PagingHandler{" +
-                "page=" + page +
+                "map=" + map +
+                ", page=" + page +
                 ", startPage=" + startPage +
                 ", endPage=" + endPage +
                 ", startList=" + startList +
@@ -133,6 +154,8 @@ public class PagingHandler
                 ", prevPageStart=" + prevPageStart +
                 ", boardCnt=" + boardCnt +
                 ", totPage=" + totPage +
+                ", myItem='" + myItem + '\'' +
+                ", uno='" + uno + '\'' +
                 '}';
     }
 

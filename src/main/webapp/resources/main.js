@@ -162,13 +162,18 @@ $(document).ready(function () {
         window.location.href = contextRoot+"board";
     });
 
+    // 로그인 여부에 따른 내 글만 보기 감추기
+    if(uno == "")
+        $("#myItems").html("");
+
     // 게시글 목록 불러오기 ajax
     function bList()
     {
         $.ajax({
             type : "GET"
             , url : contextRoot+"board/list"
-            , data: {"page":$("#page").val(),"keyword":$("#keyword").val(),"search":$("#option").val(), "sort":$("#sort").val()}
+            , data: {"page":$("#page").val(),"keyword":$("#keyword").val(),"search":$("#option").val(),
+                     "sort":$("#sort").val(), "myItem" : $("#myItem").prop('checked'), "uno" : uno}
             , success : function (objMap) {
                 let list = objMap.list;
                 let ph = objMap.ph;
@@ -191,7 +196,7 @@ $(document).ready(function () {
                             + "<i class='fa-solid fa-thumbs-up'></i>"
                             + "<span>" + list[i].like_count + "</span>"
                             + "<i class='fa-solid fa-comment'></i>"
-                            + "<span>" + 0 + "</span>"
+                            + "<span>" + list[i].cmt_count + "</span>"
                             + "<i class='fa-solid fa-eye'></i>"
                             + "<span>" + list[i].view_count + "</span>";
                         item += "</div>" // itemInfo 끝
@@ -232,6 +237,11 @@ $(document).ready(function () {
             }
         });
     }
+
+    $("#myItem").click(function() {
+       bList();
+    });
+
     bList();
 
     // 게시글 검색
@@ -312,6 +322,30 @@ $(document).ready(function () {
         writerInfo.css("display","block");
     }
 
+    // 좋아요 기능
+    $("#likeBtn").click(function () {
+        if(uno == "")
+        {
+            alert("게시글 추천은 로그인 후 가능합니다.");
+            return;
+        }
+        else
+       $.ajax({
+           type : "POST"
+           , url : contextRoot+"board/like"
+           , data : {"bno" : $("#bno").val(), "uno" : uno}
+           , success : function (result) {
+                if (result == "success")
+                    alert("추천 완료!");
+                else
+                    alert("이미 추천한 게시글입니다.")
+           }
+           , error(request) {
+               console.log(request.responseText);
+           }
+       })
+    });
+
     // 작성자 여부에 따른 수정, 삭제버튼 노출 여부
     if($("#isWriter").val() != "true")
     {
@@ -359,6 +393,8 @@ $(document).ready(function () {
         writerInfo.css("display","none");
         title.removeAttr("readonly");
         content.attr("contentEditable","true");
+        $("#likeBtnArea").css("display","none");
+
 
         // 버튼 구성요소 변경
         $("#goList").css("display","none");
@@ -424,8 +460,6 @@ $(document).ready(function () {
             if(cmtList.length != 0)
                 for(let i = 0; i < cmtList.length; i++)
                 {
-                    if(uno == null)
-                        uno = -1;
                     let hidden = cmtList[i].c_uno == uno ? "" : "hidden='hidden'";
                     html += "<div class='cmtItem'>";
                     // 덧글 내용

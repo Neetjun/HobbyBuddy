@@ -8,6 +8,13 @@
 
     <sql id="selectAll">
         SELECT BNO, TITLE, B_CONTENT, B_REG_DATE, U_DATE, B_UNO, LIKE_COUNT, VIEW_COUNT
+             ,
+            (
+                SELECT COUNT(*)
+                FROM CMT
+                WHERE C_BNO = BOARD.BNO
+                  AND NOT EXISTS(SELECT * FROM DEL_CMT WHERE CNO = DEL_CMT.CNO)
+            ) AS CMT_COUNT
         FROM BOARD
     </sql>
 
@@ -35,8 +42,12 @@
             </choose>
         </if>
 
+        <if test="myItem == 'true'.toString()">
+            AND B_UNO = ${uno}
+        </if>
+
         <choose>
-            <when test="sort == bno">
+            <when test="sort == 'bno'.toString()">
                 ORDER BY BNO DESC
             </when>
             <otherwise>
@@ -78,5 +89,23 @@
         UPDATE BOARD
         SET TITLE = #{title}, B_CONTENT = #{b_content}, U_DATE = SYSDATE
         WHERE BNO = ${bno}
+    </update>
+
+    <select id="likeCnt" parameterType="hashMap" resultType="int">
+        SELECT COUNT(*)
+        FROM LIKE_HISTORY
+        WHERE 1=1
+          AND BNO = #{bno}
+          AND UNO = #{uno}
+    </select>
+
+    <insert id="likeContent" parameterType="hashMap">
+        INSERT INTO LIKE_HISTORY(BNO, UNO, LIKE_DATE) VALUES(#{bno}, #{uno}, SYSDATE)
+    </insert>
+
+    <update id="updateLikeCnt" parameterType="hashMap">
+        UPDATE BOARD
+        SET LIKE_COUNT = (SELECT LIKE_COUNT FROM BOARD WHERE BNO = #{bno})+1
+        WHERE BNO = #{bno}
     </update>
 </mapper>

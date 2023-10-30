@@ -43,8 +43,13 @@ public class BoardDAOImpl implements BoardDAO {
     @Override
     public String isWriter(BoardDTO dto) { return session.selectOne(namespace+"isWriter",dto); }
     @Override
-    public void deleteBoard(BoardDTO dto) {session.delete(namespace+"deleteBoard",dto);};
+    public void deleteBoard(BoardDTO dto) {session.delete(namespace+"deleteBoard",dto);}
     @Override
-    public void updateBoard(BoardDTO dto) {session.update(namespace+"updateBoard",dto);};
-
+    public void updateBoard(BoardDTO dto) {session.update(namespace+"updateBoard",dto);}
+    @Override
+    public int likeCnt(HashMap<String,String> likeMap) {return session.selectOne(namespace+"likeCnt",likeMap);}
+    @Override
+    public void likeContent(HashMap<String,String> likeMap) {session.insert(namespace+"likeContent",likeMap);}
+    @Override
+    public void updateLikeCnt(HashMap<String,String> likeMap) {session.update(namespace+"updateLikeCnt",likeMap);}
 }
