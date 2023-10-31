@@ -326,7 +326,7 @@ $(document).ready(function () {
     $("#likeBtn").click(function () {
         if(uno == "")
         {
-            alert("게시글 추천은 로그인 후 가능합니다.");
+            alert("좋아요는 로그인 후 가능합니다.");
             return;
         }
         else
@@ -336,9 +336,9 @@ $(document).ready(function () {
            , data : {"bno" : $("#bno").val(), "uno" : uno}
            , success : function (result) {
                 if (result == "success")
-                    alert("추천 완료!");
+                    window.location.href = contextRoot+"board/"+$("#bno").val();
                 else
-                    alert("이미 추천한 게시글입니다.")
+                    alert("좋아요는 한 번만 가능합니다.")
            }
            , error(request) {
                console.log(request.responseText);
@@ -447,6 +447,31 @@ $(document).ready(function () {
         $(this).parent().submit();
     });
 
+    // 대댓글 입력
+    $(document).on("click",".reply > span", function () {
+        // if(uno == "")
+        // {
+        //     alert("답글은 로그인 후 남길 수 있습니다.");
+        //     return;
+        // }
+        // else
+        // {
+            let tgtCmtArea = $(this).parent().parent().parent();
+            let replayInput = $(this).parent().parent().parent().parent().parent().next();
+            replayInput.prepend("<span id='replyBlank'>ㄴ</span>");
+
+            $("#replyBlank").css("font-weight","bold");
+            $("#replyBlank").css("color","gray");
+            $("#replyBlank").css("font-size","15px");
+            $("#replyBlank").css("margin-left","25px");
+            $("#replyBlank").css("margin-right","15px");
+
+            tgtCmtArea.append(replayInput.html());
+
+        // }
+
+    });
+
     // 덧글 가져오기
     // if(contextRoot == "comment/")
     $.ajax({
@@ -469,11 +494,13 @@ $(document).ready(function () {
                     html += "<div class='profile-image'><img src="+contextPath+"/resources/image/profile.jpeg/></div>";
                     html += "<div id='cWriter'>"+cmtList[i].nickname+"</div>"
                     html += "<div id='cDate'>"+cmtList[i].c_reg_date+"</div>"
-                    html += "<div id='reply'><span>답글쓰기</span></div>"
+                    html += "<div class='reply'><span>답글쓰기</span></div>"
                     html += "</div>";
                     //덧글 삭제버튼
                     html += "<button type='button' class='cancel cDelete' value='"+ cmtList[i].cno +"'"+ hidden +">삭제</button>";
+                    html += "<input name='tcno' hidden='hidden' value="+cmtList[i].cno+"/>"
                     html += "</div>";
+
                 }
             else
             {
@@ -481,9 +508,6 @@ $(document).ready(function () {
             }
 
 
-
-
-            html += "<input name='cno' hidden='hidden'/>"
             $("#commentList > form").html(html);
         })
         , error : (function (request) {

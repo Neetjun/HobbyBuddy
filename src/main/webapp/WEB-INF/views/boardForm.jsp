@@ -98,12 +98,14 @@
             <c:choose>
                 <c:when test="${sessionScope.get('id') ne null}">
                     <%-- 덧글입력창 --%>
-                    <form action="<c:url value="/comment"/>" method="post">
-                        <textarea id="cInput" placeholder="깨끗한 덧글 문화를 유지합시다." name="c_content"></textarea>
-                        <input type="hidden" name="c_bno" value="${boardDTO.bno}">
-                        <input type="hidden" name="c_uno" value="${sessionScope.get("uno")}">
-                        <button type="button" class="submitBtn" id="cSubmit">등록</button>
-                    </form>
+                    <div id="cInputArea">
+                        <form action="<c:url value="/comment"/>" method="post">
+                            <textarea id="cInput" placeholder="깨끗한 덧글 문화를 유지합시다." name="c_content"></textarea>
+                            <input type="hidden" name="c_bno" value="${boardDTO.bno}">
+                            <input type="hidden" name="c_uno" value="${sessionScope.get("uno")}">
+                            <button type="button" class="submitBtn" id="cSubmit">등록</button>
+                        </form>
+                    </div>
                 </c:when>
                 <c:otherwise>
                     <span id="cLoginReq">덧글은 로그인 후 입력이 가능합니다!</span>

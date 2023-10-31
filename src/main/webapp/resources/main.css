@@ -570,7 +570,7 @@ boardForm.jsp
     font-family: 나눔고딕;
 }
 
-#reply
+.reply
 {
     margin-top: 5px;
     font-weight: bold;
@@ -578,7 +578,7 @@ boardForm.jsp
     font-size: 8pt;
 }
 
-#reply > span:hover
+.reply > span:hover
 {
     cursor: pointer;
 }
@@ -604,7 +604,7 @@ boardForm.jsp
     margin-top: 85px;
 }
 
-.comment-area > form
+#cInputArea > form
 {
     display: flex;
     justify-content: flex-start;
