@@ -621,7 +621,7 @@ boardForm.jsp
     resize: none;
 }
 
-#cSubmit
+.cSubmit
 {
     margin-top: 45px;
     margin-left: 40px;

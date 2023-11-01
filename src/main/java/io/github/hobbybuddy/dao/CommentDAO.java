@@ -8,4 +8,5 @@ public interface CommentDAO {
     void postComment(CommentDTO commentDTO);
     void deleteComment(CommentDTO commentDTO);
     List<CommentDTO> getComment(Integer bno);
+    void postReply(CommentDTO commentDTO);
 }

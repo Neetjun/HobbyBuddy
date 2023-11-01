@@ -26,7 +26,13 @@ public class CommentController {
     {
         // cno가 null이면 댓글등록, 아니면 삭제
         if(commentDTO.getCno() == null)
-            commentService.postComment(commentDTO);
+        {
+            // tcno가 null이면 신규 덧글
+            if(commentDTO.getTcno() == null)
+                commentService.postComment(commentDTO);
+            else // null이 아니면 대댓글
+                commentService.postReply(commentDTO);
+        }
         else
             commentService.deleteComment(commentDTO);
 

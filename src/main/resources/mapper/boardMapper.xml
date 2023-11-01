@@ -7,14 +7,14 @@
 <mapper namespace="board">
 
     <sql id="selectAll">
-        SELECT BNO, TITLE, B_CONTENT, B_REG_DATE, U_DATE, B_UNO, LIKE_COUNT, VIEW_COUNT
-             ,
-            (
-                SELECT COUNT(*)
-                FROM CMT
-                WHERE C_BNO = BOARD.BNO
-                  AND NOT EXISTS(SELECT * FROM DEL_CMT WHERE CNO = DEL_CMT.CNO)
-            ) AS CMT_COUNT
+        SELECT BNO, TITLE, B_CONTENT, B_REG_DATE, U_DATE, B_UNO, VIEW_COUNT, LIKE_COUNT
+                ,
+               (
+                   SELECT COUNT(*)
+                   FROM CMT
+                   WHERE C_BNO = BOARD.BNO
+                     AND CNO NOT IN (SELECT CNO FROM DEL_CMT WHERE CNO = DEL_CMT.CNO)
+               ) AS CMT_COUNT
         FROM BOARD
     </sql>
 

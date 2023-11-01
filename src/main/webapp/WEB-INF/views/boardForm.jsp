@@ -91,6 +91,7 @@
             <div id="commentList">
                 <form action="<c:url value="/comment"/>" method="post">
 
+                    <input type="text" hidden="hidden" name="cno">
                 </form>
 
             </div>
@@ -103,7 +104,7 @@
                             <textarea id="cInput" placeholder="깨끗한 덧글 문화를 유지합시다." name="c_content"></textarea>
                             <input type="hidden" name="c_bno" value="${boardDTO.bno}">
                             <input type="hidden" name="c_uno" value="${sessionScope.get("uno")}">
-                            <button type="button" class="submitBtn" id="cSubmit">등록</button>
+                            <button type="button" class="submitBtn cSubmit">등록</button>
                         </form>
                     </div>
                 </c:when>

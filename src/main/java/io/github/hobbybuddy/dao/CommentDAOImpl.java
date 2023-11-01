@@ -26,6 +26,8 @@ public class CommentDAOImpl implements CommentDAO {
     }
     @Override
     public List<CommentDTO> getComment(Integer bno) { return session.selectList(namespace+"getCmt",bno); }
+    @Override
+    public void postReply(CommentDTO commentDTO) { session.insert(namespace+"postReply",commentDTO);}
 
 
 }

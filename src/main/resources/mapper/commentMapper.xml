@@ -11,6 +11,11 @@
         VALUES (SEQ_CNO.NEXTVAL, #{c_content}, ${c_uno}, ${c_bno})
     </insert>
 
+    <insert id="postReply" parameterType="commentDTO">
+        INSERT INTO CMT (CNO, C_CONTENT, TCNO, C_UNO, C_BNO)
+        VALUES (SEQ_CNO.NEXTVAL, #{c_content}, ${tcno},${c_uno},${c_bno})
+    </insert>
+
     <select id="getCmt" parameterType="Integer" resultType="commentDTO">
         SELECT CNO, C_CONTENT, C_REG_DATE, TCNO, C_UNO, C_BNO, NICKNAME
         FROM CMT C JOIN USERINFO U
@@ -18,7 +23,7 @@
         WHERE 1=1
           AND C_BNO = ${bno}
           AND NOT EXISTS(SELECT 1 FROM DEL_CMT WHERE CNO = C.CNO)
-        ORDER BY C_REG_DATE
+        ORDER BY CASE WHEN TCNO IS NULL THEN CNO ELSE TCNO END, CNO
     </select>
 
     <delete id="deleteCmt" parameterType="commentDTO">
