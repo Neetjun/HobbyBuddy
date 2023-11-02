@@ -129,11 +129,8 @@ public class BoardController {
     {
         int cntResult = boardService.likeCnt(likeMap);
 
-        System.out.println("cntResult = " + cntResult);
-
         if(cntResult == 0)
         {
-            System.out.println("likeMap = " + likeMap);
             boardService.likeContent(likeMap);
             boardService.updateLikeCnt(likeMap);
             return "success";

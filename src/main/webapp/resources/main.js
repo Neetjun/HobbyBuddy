@@ -491,8 +491,10 @@ $(document).ready(function () {
                 if(cmtList.length != 0)
                     for (let i = 0; i < cmtList.length; i++) {
                         let hidden = cmtList[i].c_uno == uno ? "" : "hidden='hidden'";
-                        let isReply = cmtList[i].tcno == null ? "" : "style='padding-left:80px'"
-                        html += "<div class='cmtItem' "+isReply+">";
+                        let replyPadding = cmtList[i].tcno == null ? "" : "style='padding-left:80px'";
+                        let replyDelBtn = cmtList[i].tcno == null ? "" : "style='margin-left:870px'";
+                        let isReply = cmtList[i].tcno == null ? cmtList[i].cno : cmtList[i].tcno;
+                        html += "<div class='cmtItem' "+replyPadding+">";
                         // 덧글 내용
                         html += "<div id='c-content'>" + cmtList[i].c_content + "</div>";
                         // 덧글 프로필
@@ -503,8 +505,9 @@ $(document).ready(function () {
                         html += "<div class='reply'><span>답글쓰기</span></div>"
                         html += "</div>";
                         //덧글 삭제버튼
-                        html += "<button type='button' class='cancel cDelete' value='" + cmtList[i].cno + "'" + hidden + ">삭제</button>";
-                        html += "<input name='tcno' class='tcno' hidden='hidden' value="+"'"+ cmtList[i].cno + "'"+"/>"
+                        html += "<button type='button' class='cancel cDelete' value='"
+                            + cmtList[i].cno + "'" + hidden + " " + replyDelBtn +">삭제</button>";
+                        html += "<input name='tcno' class='tcno' hidden='hidden' value="+"'"+ isReply + "'"+"/>"
                         html += "</div>";
                     }
                 else {
