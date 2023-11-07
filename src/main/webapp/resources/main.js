@@ -91,7 +91,7 @@ $(document).ready(function () {
     $("#regBtn").click(function () {
         let idCheck = /^[a-z0-9+]{6,12}$/;
         let pwCheck = /^[A-Za-z0-9+]{8,15}$/;
-        let nickCheck = /^[가-힣a-zA-Z0-9+]{1,15}$/;
+        let nickCheck = /^(?:(?:[가-힣0-9]{1,6})|(?:[a-zA-Z0-9]{1,12}))$/
 
         if ($(this).parent().attr("method") == "post") {
             // 아이디 검사
@@ -105,7 +105,7 @@ $(document).ready(function () {
                 return;
             }
             // 닉네임 검사
-            if (!nickCheck.test($("#nickname > input").val())) {
+            if (!nickCheck.test($("#newNickname").val())) {
                 alert("닉네임 형식이 올바르지 않습니다.");
                 return;
             }
@@ -129,14 +129,18 @@ $(document).ready(function () {
             $("#nickname").html("<input type='hidden' name='_method' value='PATCH'/>");
             $("#id").html("현재 닉네임 : <b>" + nickname + "</b>");
             $("#id").append("<div>새로운 닉네임 : <input id='newNickname' name='nickname'/> " + "<input type='hidden' value='" + id + "' name='id'/></div>")
+            $("#id > div").append("<span class=\"regCondition\">한글 6글자 / 영어 12글자</span>");
             $("#id").append("<input name='mod' value='modify' type='hidden'/>");
             $("#pw").html("");
             $(".regCondition").css("display", "none");
+            $("#id > div > span").css("display","inline");
+            $("#id > div > span").css("margin-left","25px");
+            $("#id > div > span").css("margin-top","5px");
             $("#regBtn").text("수정");
             $("#regBtn").css("marginLeft", "100");
             $("#regBtn").css("marginTop", "15");
             $("#modal-title").next().attr("method", 'post');
-            $(".modal-content").css("width", "400px");
+            $(".modal-content").css("width", "450px");
         }
 
         $(".modal").fadeIn();
@@ -179,6 +183,9 @@ $(document).ready(function () {
 
                         // 게시판 목록 출력하기
                         for (let i = ph.startList - 1; i < ph.endList; i++) {
+                            if(list[i] == null)
+                                break;
+
                             let item = "<div class='boardItem'>";
                             item += "<div class='Thumbnail'>" + "Hobby Buddy" + "</div>";
                             item += "<div class='titleAndInfo'>";
@@ -202,8 +209,8 @@ $(document).ready(function () {
                         let pages = "";
                         if (ph.startPage > 10)
                             pages += "<i class=\'fa-solid fa-angle-left\' id='" + ph.prevPageStart + "'></i>";
-
                         for (let j = ph.startPage; j <= ph.endPage; j++) {
+
                             if (j == $("#page").val())
                                 pages += "<span id='curPage'>" + j + "</span>";
                             else
