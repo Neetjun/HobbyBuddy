@@ -37,7 +37,7 @@
                     OR B_CONTENT LIKE '%'||#{keyword}||'%'
                 </when>
                 <when test="search == 'U'.toString()">
-                    AND B_UNO = (SELECT UNO FROM USERINFO WHERE NICKNAME LIKE '%'||#{keyword}||'%')
+                    AND B_UNO IN (SELECT UNO FROM USERINFO WHERE NICKNAME LIKE '%'||#{keyword}||'%')
                 </when>
             </choose>
         </if>
@@ -106,6 +106,12 @@
     <update id="updateLikeCnt" parameterType="hashMap">
         UPDATE BOARD
         SET LIKE_COUNT = (SELECT LIKE_COUNT FROM BOARD WHERE BNO = #{bno})+1
+        WHERE BNO = #{bno}
+    </update>
+
+    <update id="updateViewCnt" parameterType="BoardDTO">
+        UPDATE BOARD
+        SET VIEW_COUNT = (SELECT VIEW_COUNT FROM BOARD WHERE BNO = #{bno})+1
         WHERE BNO = #{bno}
     </update>
 </mapper>

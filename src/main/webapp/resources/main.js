@@ -224,6 +224,7 @@ $(document).ready(function () {
                         $(".boardList").html($(".boardList").next().html()); // noItem을 감싸고있는 Div의 html 내용 가져오기
                         $(".boardList").css("justifyContent", "center");
                         $("#noItem").removeAttr("hidden");
+                        $("#pages").html("");
                     }
 
                 }
@@ -241,9 +242,6 @@ $(document).ready(function () {
 
         // 게시글 검색
         $("#searchInput > button").click(function () {
-            // alert($("#keyword").val());
-            // alert($("#option").val());
-            // alert($("#sort").val());
             bList();
         });
 

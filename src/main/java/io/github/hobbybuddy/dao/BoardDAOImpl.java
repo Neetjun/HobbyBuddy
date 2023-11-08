@@ -52,4 +52,8 @@ public class BoardDAOImpl implements BoardDAO {
     public void likeContent(HashMap<String,String> likeMap) {session.insert(namespace+"likeContent",likeMap);}
     @Override
     public void updateLikeCnt(HashMap<String,String> likeMap) {session.update(namespace+"updateLikeCnt",likeMap);}
+    @Override
+    public void updateViewCnt(BoardDTO dto) {
+        session.update(namespace+"updateViewCnt",dto);
+    }
 }

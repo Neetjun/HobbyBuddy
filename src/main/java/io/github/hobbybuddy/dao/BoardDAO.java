@@ -18,4 +18,5 @@ public interface BoardDAO {
     int likeCnt(HashMap<String,String> likeMap);
     void likeContent(HashMap<String,String> likeMap);
     void updateLikeCnt(HashMap<String,String> likeMap);
+    void updateViewCnt(BoardDTO dto);
 }

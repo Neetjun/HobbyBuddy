@@ -62,6 +62,9 @@ public class BoardController {
         dto = boardService.getBoard(dto.getBno());
         String id = (String)session.getAttribute("id");
 
+        // 조회수 증가
+        boardService.updateViewCnt(dto);
+
         // 비회원 상태라면
         id = id == null ? "" : id;
 

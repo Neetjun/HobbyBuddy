@@ -44,4 +44,5 @@ public class BoardService
     public int likeCnt(HashMap<String,String> likeMap) {return dao.likeCnt(likeMap);}
     public void likeContent(HashMap<String,String> likeMap) {dao.likeContent(likeMap);}
     public void updateLikeCnt(HashMap<String,String> likeMap) {dao.updateLikeCnt(likeMap);}
+    public void updateViewCnt(BoardDTO dto) {dao.updateViewCnt(dto);}
 }
