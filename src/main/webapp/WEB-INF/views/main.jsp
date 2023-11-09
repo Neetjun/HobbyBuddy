@@ -85,5 +85,6 @@
     <%-- 회원가입 및 로그인 성공 여부 확인 --%>
     <input type="hidden" id="regCheck" value="${regResult}">
     <input type="hidden" id="loginCheck" value="${loginCheck}">
+    <input type="hidden" id="loginReq" value="${loginReq}">
 </body>
 </html>

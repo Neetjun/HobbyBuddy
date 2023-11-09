@@ -10,6 +10,10 @@ $(document).ready(function () {
     if ($("#loginCheck").val() == "fail")
         alert("로그인 실패.\nID와 PW를 확인해주세요.");
 
+    /* 비회원이 회원 기능 요청 시 알림*/
+    if ($("#loginReq").val() == "true")
+        alert("비정상적인 접근 방식입니다. 로그인을 해주세요.");
+
     /* 회원가입 및 로그인 모달창 띄우기 */
     $(".loginBox > button").click(function () {
         // 눌린 버튼의 id 대입
@@ -441,7 +445,6 @@ $(document).ready(function () {
                 let tcno = $(this).parent().parent().prev().clone();
                 $(this).parent().append(tcno);
             }
-
 
             $(this).parent().submit();
         });
