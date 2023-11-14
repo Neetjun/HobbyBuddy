@@ -22,7 +22,7 @@ public class UserController
 
     // 회원가입
     @PostMapping("")
-    public String registration(UserDTO user, Model m, String mod, RedirectAttributes ra, HttpSession session)
+    public String registration(UserDTO user, Model m, String mod, RedirectAttributes ra, HttpSession session, HttpServletRequest request)
     {
         if(mod == null)
             mod = "";
@@ -32,17 +32,20 @@ public class UserController
         {
             userService.modNickname(user);
             session.setAttribute("nickname",user.getNickname());
-            return "redirect:/";
+            String goTo = request.getHeader("Referer");
+
+            return "redirect:" + goTo;
         }
 
         // 서비스 계층에서 user insert문 불러와서 실행
         int result = userService.registerUser(user);
 
         // 성공 실패 확인
-        System.out.println("result = " + result);
         ra.addFlashAttribute("regResult", result);
 
-        return "redirect:/";
+        String goTo = request.getHeader("Referer");
+
+        return "redirect:" + goTo;
     }
 
     // 로그인

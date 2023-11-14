@@ -11,8 +11,13 @@ $(document).ready(function () {
         alert("로그인 실패.\nID와 PW를 확인해주세요.");
 
     /* 비회원이 회원 기능 요청 시 알림*/
-    if ($("#loginReq").val() == "true")
-        alert("비정상적인 접근 방식입니다. 로그인을 해주세요.");
+    if ($("#unAuthErr").val() != "") {
+        if ($("#unAuthErr").val() == "loginErr")
+            alert("비정상적인 접근 방식입니다. 로그인을 해주세요.");
+        else if ($("#unAuthErr").val() == "unoErr")
+            alert("해당 기능을 요청할 권한이 없습니다.");
+    }
+
 
     /* 회원가입 및 로그인 모달창 띄우기 */
     $(".loginBox > button").click(function () {
@@ -50,51 +55,61 @@ $(document).ready(function () {
         $(".modal").fadeOut();
     });
 
-    /* 아이디 중복검사 */
-    $("#id > input").on("blur", function () {
-        $.ajax({
-            type: "GET",
-            url: contextRoot + "user/dupCheck",
-            dataType: "text",
-            data: {"id": $("#id > input").val()},
-            success: function (result) {
-                // 키 누를 때마다 체크 메시지 지우기
-                $("#dupCheck").text("");
-
-                // id글자수 조건 충족 및 회원가입 모달일 경우.
-                if ($("#id > input").val().length >= 6 && $("#modal-title").text() == "회원가입") {
-                    // 모달창 늘려주기
-                    $(".modal-content").css("height", "220px");
-
-                    // 중복된 아이디가 있다면
-                    if (result == "duplicated") {
-                        $("#dupCheck").text("중복!");
-                        $("#dupCheck").css("color", "red");
-                        $("#dupCheck").css("fontSize", "11pt");
-                        $("#pw").css("marginTop", "10px");
-                    } else {
-                        // $("#dupCheck").text("OK");
-                        $("#dupCheck").text("중복검사 통과");
-                        $("#dupCheck").css("color", "green");
-                        $("#dupCheck").css("fontSize", "11pt");
-                        $("#pw").css("marginTop", "10px");
-                    }
-                } else {
-                    // 메세지 사라지면 모달창 크기 원상복구
-                    $(".modal-content").css("height", "200px");
-                    $("#pw").css("marginTop", "0");
-                }
-            },
-            error: function (request) {
-                $("#dupCheck").text(this.error);
-            }
-        });
+    /* 모달 외부 회색영역 클릭 시 모달창 닫기 */
+    $('.modal').mousedown(function (e) {
+        if ($(this).has(e.target).length === 0)
+            $("#modalCancel").click();
     });
+
+    /* 아이디 중복검사 */
+    if ($("#modal-title").text() == "회원가입")
+    {
+        $("#id > input").on("blur", function () {
+            $.ajax({
+                type: "GET",
+                url: contextRoot + "user/dupCheck",
+                dataType: "text",
+                data: {"id": $("#id > input").val()},
+                success: function (result) {
+                    // 키 누를 때마다 체크 메시지 지우기
+                    $("#dupCheck").text("");
+
+                    // id글자수 조건 충족 및 회원가입 모달일 경우.
+                    if ($("#id > input").val().length >= 6 && $("#modal-title").text() == "회원가입") {
+                        // 모달창 늘려주기
+                        $(".modal-content").css("height", "220px");
+
+                        // 중복된 아이디가 있다면
+                        if (result == "duplicated") {
+                            $("#dupCheck").text("중복!");
+                            $("#dupCheck").css("color", "red");
+                            $("#dupCheck").css("fontSize", "11pt");
+                            $("#pw").css("marginTop", "10px");
+                        } else {
+                            // $("#dupCheck").text("OK");
+                            $("#dupCheck").text("중복검사 통과");
+                            $("#dupCheck").css("color", "green");
+                            $("#dupCheck").css("fontSize", "11pt");
+                            $("#pw").css("marginTop", "10px");
+                        }
+                    } else {
+                        // 메세지 사라지면 모달창 크기 원상복구
+                        $(".modal-content").css("height", "200px");
+                        $("#pw").css("marginTop", "0");
+                    }
+                },
+                error: function (request) {
+                    $("#dupCheck").text(this.error);
+                }
+            });
+        });
+    }
 
     /*회원가입 시 아이디, 비밀번호, 닉네임 검사*/
     $("#regBtn").click(function () {
         let idCheck = /^[a-z0-9+]{6,12}$/;
-        let pwCheck = /^[A-Za-z0-9+]{8,15}$/;
+        // let pwCheck = /^[(A-Za-z)+0-9+]{8,15}$/; /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/
+        let pwCheck = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/;
         let nickCheck = /^(?:(?:[가-힣0-9]{1,6})|(?:[a-zA-Z0-9]{1,12}))$/
 
         if ($(this).parent().attr("method") == "post") {
@@ -104,7 +119,7 @@ $(document).ready(function () {
                 return;
             }
             // 비밀번호 검사
-            if (!pwCheck.test($("#pw > input").val())) {
+            if (!pwCheck.test($("#pw > input").val()) && $("#modal-title").text() != "닉네임 수정") {
                 alert("비밀번호 형식이 올바르지 않습니다.");
                 return;
             }
@@ -284,9 +299,18 @@ $(document).ready(function () {
     /* ----- BoardForm.jsp -------- */
     if(flag != -1)
     {
+        // 게시글 등록
         $("#bSubmit").click(function () {
             $("#board-content > textarea").text($("#inputDiv").html());
-            $(this).parent().parent().submit();
+
+            //제목 또는 내용 빈칸일 시 경고
+            if($("#board-title > input").val().trim() == "" || $("#board-content > textarea").text().trim() == "")
+            {
+                alert("제목과 내용을 입력해주세요.");
+                return;
+            }
+
+            $(this).parent().parent().parent().submit();
         });
 
         $("#bCancel").click(function () {
@@ -314,12 +338,13 @@ $(document).ready(function () {
             title.css("fontSize", "16pt");
             content.css("border", "0");
             content.css("height", "auto");
-            writerInfo.css("display", "block");
+            writerInfo.css("display","flex");
         }
 
         // 좋아요 기능
         $("#likeBtn").click(function () {
-            if (uno == "") {
+            if (uno == "")
+            {
                 alert("좋아요는 로그인 후 가능합니다.");
                 return;
             } else
@@ -327,16 +352,16 @@ $(document).ready(function () {
                     type: "POST"
                     , url: contextRoot + "board/like"
                     , data: {"bno": $("#bno").val(), "uno": uno}
-                    , success: function (result) {
-                        if (result == "success")
-                            window.location.href = contextRoot + "board/" + $("#bno").val();
+                    , success: function (res) {
+                        if (res.result == "success")
+                            $("#likeBtnArea > span").text(res.likeCnt);
                         else
-                            alert("좋아요는 한 번만 가능합니다.")
+                            alert("좋아요는 한 번만 가능합니다.");
                     }
                     , error(request) {
                         console.log(request.responseText);
                     }
-                })
+                });
         });
 
         // 작성자 여부에 따른 수정, 삭제버튼 노출 여부
@@ -353,7 +378,6 @@ $(document).ready(function () {
 
         // 게시글 삭제하기
         $("#bDelete").click(function () {
-
             if (confirm("정말로 삭제하시겠습니까?")) {
                 // alert("확인");
                 let formObj = $(this).parent().parent().parent();
@@ -384,7 +408,6 @@ $(document).ready(function () {
             title.removeAttr("readonly");
             content.attr("contentEditable", "true");
             $("#likeBtnArea").css("display", "none");
-
 
             // 버튼 구성요소 변경
             $("#goList").css("display", "none");
@@ -433,6 +456,13 @@ $(document).ready(function () {
 
         // 덧글 입력
         $(document).on("click", ".cSubmit", function () {
+            let tcno = null;
+
+            if($(this).parent().attr("class") == "replyForm")
+            {
+                tcno = $(this).parent().parent().prev().clone();
+                $(this).parent().append(tcno);
+            }
 
             if($("#cInput").val().trim().length == 0)
             {
@@ -440,13 +470,21 @@ $(document).ready(function () {
                 return;
             }
 
-            if($(this).parent().attr("class") == "replyForm")
-            {
-                let tcno = $(this).parent().parent().prev().clone();
-                $(this).parent().append(tcno);
-            }
+            let data = $(this).parent().serialize();
 
-            $(this).parent().submit();
+            $.ajax({
+                type : "POST"
+                , url : contextRoot + "comment"
+                , data : data
+                , success : function () {
+                    $("textarea[name='c_content']").val("");
+                }
+                , error(request) {
+                    console.log(request.responseText);
+                }
+            });
+            // 0.3초 뒤에 덧글목록 불러오기 (신규덧글 안 불려오는 현상 대비용)
+            setTimeout(cList,300);
         });
 
         // 대댓글 입력
@@ -484,58 +522,68 @@ $(document).ready(function () {
                 spanObj.text("답글쓰기");
                 tgtCmtArea.find("#cInputArea").remove();
             }
-            // }
         });
 
         // 덧글 가져오기
-        $.ajax({
-            type: "GET"
-            , url: contextRoot + "comment"
-            , data: {"bno": $("#bno").val()}
-            , success: (function (cmtList) {
+        function cList(){
+            $.ajax({
+                type: "GET"
+                , url: contextRoot + "comment"
+                , data: {"bno": $("#bno").val()}
+                , success: (function (cmtList) {
 
-                let html = "";
-
-                if(cmtList.length != 0)
-                    for (let i = 0; i < cmtList.length; i++) {
-                        let hidden = cmtList[i].c_uno == uno ? "" : "hidden='hidden'";
-                        let replyPadding = cmtList[i].tcno == null ? "" : "style='padding-left:80px'";
-                        let replyDelBtn = cmtList[i].tcno == null ? "" : "style='margin-left:870px'";
-                        let isReply = cmtList[i].tcno == null ? cmtList[i].cno : cmtList[i].tcno;
-                        html += "<div class='cmtItem' "+replyPadding+">";
-                        // 덧글 내용
-                        html += "<div id='c-content'>" + cmtList[i].c_content + "</div>";
-                        // 덧글 프로필
-                        html += "<div id='c-profile' class='profile'>";
-                        html += "<div class='profile-image'><img src=" + contextRoot + "resources/image/profile.jpeg/></div>";
-                        html += "<div id='cWriter'>" + cmtList[i].nickname + "</div>"
-                        html += "<div id='cDate'>" + cmtList[i].c_reg_date + "</div>"
-                        html += "<div class='reply'><span>답글쓰기</span></div>"
-                        html += "</div>";
-                        //덧글 삭제버튼
-                        html += "<button type='button' class='cancel cDelete' value='"
-                            + cmtList[i].cno + "'" + hidden + " " + replyDelBtn +">삭제</button>";
-                        html += "<input name='tcno' class='tcno' hidden='hidden' value="+"'"+ isReply + "'"+"/>"
-                        html += "</div>";
+                    let html = "";
+                    if (cmtList.length != 0)
+                        for (let i = 0; i < cmtList.length; i++) {
+                            let hidden = cmtList[i].c_uno == uno ? "" : "hidden='hidden'";
+                            let replyPadding = cmtList[i].tcno == null ? "" : "style='padding-left:80px'";
+                            let replyDelBtn = cmtList[i].tcno == null ? "" : "style='margin-left:870px'";
+                            let isReply = cmtList[i].tcno == null ? cmtList[i].cno : cmtList[i].tcno;
+                            html += "<div class='cmtItem' " + replyPadding + ">";
+                            // 덧글 내용
+                            html += "<div id='c-content'>" + cmtList[i].c_content + "</div>";
+                            // 덧글 프로필
+                            html += "<div id='c-profile' class='profile'>";
+                            html += "<div class='profile-image'><img src=" + contextRoot + "resources/image/profile.jpeg/></div>";
+                            html += "<div id='cWriter'>" + cmtList[i].nickname + "</div>"
+                            html += "<div id='cDate'>" + cmtList[i].c_reg_date + "</div>"
+                            html += "<div class='reply'><span>답글쓰기</span></div>"
+                            html += "</div>";
+                            //덧글 삭제버튼
+                            html += "<button type='button' class='cancel cDelete' value='"
+                                + cmtList[i].cno + "'" + hidden + " " + replyDelBtn + ">삭제</button>";
+                            html += "<input name='tcno' class='tcno' hidden='hidden' value=" + "'" + isReply + "'" + "/>"
+                            html += "</div>";
+                        }
+                    else {
+                        html += "<div id='noComment'>등록된 덧글이 없습니다.</div>";
                     }
-                else {
-                    html += "<div id='noComment'>등록된 덧글이 없습니다.</div>";
-                }
 
-                $("#commentList > form").append(html);
-            })
-            , error: (function (request) {
-                console.log(request.responseText);
-            })
-        });
+                    $("#commentList > form").html(html);
+                })
+                , error: (function (request) {
+                    console.log(request.responseText);
+                })
+            });
+        }
+        cList();
 
         // 덧글 삭제
         $(document).on("click", ".cDelete", function () {
-            // 인풋태그에 해당 버튼의 value (cno)값 넘기기
-            $(this).parent().parent().children("input").val($(this).val());
+            let cno = $(this).val();
 
-            // form태그 제출
-            $(this).parent().parent().submit();
+            $.ajax({
+                type : "POST"
+                , url : contextRoot + "comment"
+                , data : {"cno" : cno}
+                , success : function () {
+                }
+                , error(request) {
+                    console.log(request.responseText);
+                }
+            });
+            // 0.3초 뒤에 덧글목록 불러오기 (신규덧글 안 불려오는 현상 대비용)
+            setTimeout(cList,300);
         });
     }
 });

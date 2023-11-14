@@ -22,8 +22,11 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("")
-    public String postComment(CommentDTO commentDTO, Model m, HttpServletRequest request)
+    @ResponseBody
+    public void postComment(CommentDTO commentDTO, Model m, HttpServletRequest request)
     {
+        System.out.println(commentDTO.toString());
+
         // cno가 null이면 댓글등록, 아니면 삭제
         if(commentDTO.getCno() == null)
         {
@@ -35,9 +38,6 @@ public class CommentController {
         }
         else
             commentService.deleteComment(commentDTO);
-
-        // 덧글을 달았던 게시글로 이동
-        return "redirect:"+request.getHeader("referer");
     }
 
     @GetMapping("")

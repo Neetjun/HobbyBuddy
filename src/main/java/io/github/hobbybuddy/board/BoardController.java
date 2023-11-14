@@ -38,15 +38,16 @@ public class BoardController {
 
         if(session.getAttribute("id") == null)
         {
-            ra.addFlashAttribute("loginReq","true");
+            ra.addFlashAttribute("unAuthErr","loginErr");
             return "redirect:/";
         }
 
         // dto 객체에 유저번호(작성자) 삽입
         Integer uno = (Integer)session.getAttribute("uno");
         dto.setB_uno(uno);
-        dto.setB_content(dto.getB_content().replaceAll("<div><br></div>","\n")
-                .replaceAll("^\\s+|\\s+$",""));
+        dto.setB_content(dto.getB_content().replaceAll("&lt;","<"));
+        dto.setB_content(dto.getB_content().replaceAll("&gt;",">"));
+        dto.setB_content(dto.getB_content().replaceAll("&amp;nbsp;"," ").trim());
 
         // 게시판 DB 입력
         boardService.postBoard(dto);
@@ -80,9 +81,9 @@ public class BoardController {
         // boolean isWriter = id.equals(boardService.isWriter(dto));
 
         // isWriter 쿼리문이 필요가 없지 않나??
-           boolean isWriter = dto.getB_uno() == (Integer)session.getAttribute("uno");
+        boolean isWriter = dto.getB_uno() == (Integer)session.getAttribute("uno");
 
-        dto.setB_content(dto.getB_content().replaceAll("\n","<div><br></div>"));
+        dto.setB_content(dto.getB_content().replaceAll(" ","&nbsp;"));
 
         m.addAttribute("type", "read");
         m.addAttribute("isWriter",isWriter);
@@ -98,10 +99,14 @@ public class BoardController {
     {
         if(session.getAttribute("id") == null)
         {
-            ra.addFlashAttribute("loginReq","true");
+            ra.addFlashAttribute("unAuthErr","loginErr");
             return "redirect:/";
         }
-
+        else if (!session.getAttribute("uno").equals(dto.getB_uno()))
+        {
+            ra.addFlashAttribute("unAuthErr","unoErr");
+            return "redirect:/";
+        }
 
         if(mod.equals("delete"))
         {
@@ -111,8 +116,12 @@ public class BoardController {
         }
         else
         {
-            dto.setB_content(dto.getB_content().replaceAll("<div><br></div>","\n")
-                    .replaceAll("^\\s+|\\s+$",""));
+            System.out.println("dto.getB_content() = " + dto.getB_content());
+            System.out.println("=======================================================");
+            dto.setB_content(dto.getB_content().replaceAll("&lt;","<"));
+            dto.setB_content(dto.getB_content().replaceAll("&gt;",">"));
+            dto.setB_content(dto.getB_content().replaceAll("&amp;nbsp;"," ").trim());
+            System.out.println("dto.getB_content() = " + dto.getB_content());
 
             boardService.updateBoard(dto);
 
@@ -143,17 +152,27 @@ public class BoardController {
     // 게시글 좋아요
     @ResponseBody
     @PostMapping("/like")
-    public String likeContent(@RequestParam HashMap<String,String> likeMap)
+    public HashMap<String,Object> likeContent(@RequestParam HashMap<String,String> likeMap)
     {
         int cntResult = boardService.likeCnt(likeMap);
+        HashMap<String,Object> resultMap = new HashMap<String, Object>();
 
         if(cntResult == 0)
         {
             boardService.likeContent(likeMap);
             boardService.updateLikeCnt(likeMap);
-            return "success";
+            Integer likeCnt = boardService.getBoard(Integer.parseInt(likeMap.get("bno"))).getLike_count();
+
+            resultMap.put("result","success");
+            resultMap.put("likeCnt",likeCnt);
+
+            return resultMap;
         }
         else
-            return "fail";
+        {
+            resultMap.put("result","fail");
+            return resultMap;
+        }
+
     }
 }

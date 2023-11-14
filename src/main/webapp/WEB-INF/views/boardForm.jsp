@@ -31,6 +31,7 @@
     <form action="<c:url value="/board"/>" method="post">
         <div class="board-area">
             <input type="hidden" value="${boardDTO.bno}" id="bno">
+            <input type="hidden" value="${boardDTO.b_uno}" name="b_uno">
 
             <%-- 게시글 제목 --%>
             <div id="board-title">
@@ -39,9 +40,12 @@
                 </c:if>
                 <input type="text" name="title" ${type eq 'read' ? 'readonly=readonly' : ''} value="${boardDTO.title}">
                 <div id="writerInfo">
-                    <i class="fa-solid fa-user"></i>
-                    <span id="wName">${writer}</span>
-                    <span id="bDate">${boardDTO.b_reg_date}</span>
+                    <div id="wName">
+                        <i class="fa-solid fa-user"></i>
+                        ${writer}
+                    </div>
+                    <div></div>
+                    <div id="bDate">${boardDTO.b_reg_date}</div>
                 </div>
             </div>
 
@@ -75,7 +79,7 @@
                     <c:otherwise>
                         <button id="imageBtn" type="button">+</button>
                         <input type="file" hidden="hidden" id="imageInput">
-                        <button id="bSubmit" class="submitBtn">등록</button>
+                        <button type="button" id="bSubmit" class="submitBtn">등록</button>
                         <button id="bCancel" class="cancel" type="button">취소</button>
                     </c:otherwise>
                 </c:choose>
@@ -91,7 +95,6 @@
             <div id="commentList">
                 <form action="<c:url value="/comment"/>" method="post">
 
-                    <input type="text" hidden="hidden" name="cno">
                 </form>
 
             </div>
