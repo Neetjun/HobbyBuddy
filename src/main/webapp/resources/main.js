@@ -281,7 +281,7 @@ $(document).ready(function () {
             let newPage = $(this).attr("id");
             $("#page").val(newPage);
             bList();
-        })
+        });
 
         // 게시글 읽기
         // ajax 이벤트가 안먹히므로 아래와 같이 코드 변경
@@ -302,15 +302,24 @@ $(document).ready(function () {
         // 게시글 등록
         $("#bSubmit").click(function () {
             $("#board-content > textarea").text($("#inputDiv").html());
+            let title = $("#board-title > input").val().trim();
+            let content = $("#board-content > textarea").text()
+                .replaceAll("&nbsp;","")
+                .replaceAll("<div>","")
+                .replaceAll("</div>","")
+                .replaceAll("<br>","")
+                .trim();
+
+            console.log(content);
 
             //제목 또는 내용 빈칸일 시 경고
-            if($("#board-title > input").val().trim() == "" || $("#board-content > textarea").text().trim() == "")
+            if(title == "" || content == "")
             {
                 alert("제목과 내용을 입력해주세요.");
                 return;
             }
 
-            $(this).parent().parent().parent().submit();
+            // $(this).parent().parent().parent().submit();
         });
 
         $("#bCancel").click(function () {
@@ -476,7 +485,14 @@ $(document).ready(function () {
                 type : "POST"
                 , url : contextRoot + "comment"
                 , data : data
-                , success : function () {
+                , success : function (result) {
+
+                    if(result == "fail")
+                    {
+                        window.location.href = contextRoot;
+                        alert(contextRoot);
+                    }
+
                     $("textarea[name='c_content']").val("");
                 }
                 , error(request) {
@@ -531,7 +547,6 @@ $(document).ready(function () {
                 , url: contextRoot + "comment"
                 , data: {"bno": $("#bno").val()}
                 , success: (function (cmtList) {
-
                     let html = "";
                     if (cmtList.length != 0)
                         for (let i = 0; i < cmtList.length; i++) {
@@ -576,7 +591,16 @@ $(document).ready(function () {
                 type : "POST"
                 , url : contextRoot + "comment"
                 , data : {"cno" : cno}
-                , success : function () {
+                , success : function (result) {
+                    if (result != "success")
+                    {
+                        $("#unAuthErr").val(result);
+
+                        if ($("#unAuthErr").val() == "loginErr")
+                            alert("비정상적인 접근 방식입니다. 로그인을 해주세요.");
+                        else if ($("#unAuthErr").val() == "unoErr")
+                            alert("해당 기능을 요청할 권한이 없습니다.");
+                    }
                 }
                 , error(request) {
                     console.log(request.responseText);

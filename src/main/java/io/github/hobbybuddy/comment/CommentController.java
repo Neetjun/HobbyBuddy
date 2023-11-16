@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -23,9 +25,18 @@ public class CommentController {
 
     @PostMapping("")
     @ResponseBody
-    public void postComment(CommentDTO commentDTO, Model m, HttpServletRequest request)
+    public String postComment(CommentDTO commentDTO, Model m, HttpServletRequest request, HttpSession session, RedirectAttributes ra)
     {
-        System.out.println(commentDTO.toString());
+        if(session.getAttribute("id") == null)
+        {
+            ra.addFlashAttribute("unAuthErr","loginErr");
+            return "loginErr";
+        }
+        else if (!session.getAttribute("uno").equals(commentDTO.getC_uno()))
+        {
+            ra.addFlashAttribute("unAuthErr","unoErr");
+            return "unoErr";
+        }
 
         // cno가 null이면 댓글등록, 아니면 삭제
         if(commentDTO.getCno() == null)
@@ -38,6 +49,8 @@ public class CommentController {
         }
         else
             commentService.deleteComment(commentDTO);
+
+        return "success";
     }
 
     @GetMapping("")
@@ -54,6 +67,4 @@ public class CommentController {
 
         return cmtList;
     }
-
-
 }
