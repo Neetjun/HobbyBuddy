@@ -415,6 +415,22 @@ boardForm.jsp
     padding: 20px;
 }
 
+#bInputArea
+{
+    font-size: 11pt;
+    font-family: 맑은고딕;
+    width: 1000px;
+    height: 120px;
+    padding: 20px;
+    resize: none;
+    border : 1px solid darkgray;
+}
+
+#bInputArea:focus
+{
+    outline: none;
+}
+
 #imageBtn
 {
     border: 2px solid black;
@@ -625,7 +641,6 @@ boardForm.jsp
 {
     padding-left: 15px;
     margin-top: 30px;
-    height: 60px;
     width: 900px;
     border: 1px solid darkgray;
     outline: none;

@@ -299,18 +299,16 @@ $(document).ready(function () {
     /* ----- BoardForm.jsp -------- */
     if(flag != -1)
     {
+        // 게시글 내용에 따른 작성 영역 높이 자동조절
+        $("#bInputArea").keyup(function (){
+            $(this).css('height', 'auto');
+            $(this).height(this.scrollHeight);
+        });
+
         // 게시글 등록
         $("#bSubmit").click(function () {
-            $("#board-content > textarea").text($("#inputDiv").html());
             let title = $("#board-title > input").val().trim();
-            let content = $("#board-content > textarea").text()
-                .replaceAll("&nbsp;","")
-                .replaceAll("<div>","")
-                .replaceAll("</div>","")
-                .replaceAll("<br>","")
-                .trim();
-
-            console.log(content);
+            let content = $("#bInputArea").val().trim();
 
             //제목 또는 내용 빈칸일 시 경고
             if(title == "" || content == "")
@@ -319,34 +317,23 @@ $(document).ready(function () {
                 return;
             }
 
-            // $(this).parent().parent().parent().submit();
+            $("#bForm").submit();
         });
 
         $("#bCancel").click(function () {
             window.location.href = contextRoot;
         });
 
-        // 게시판 글쓰기 입력 영역 크기 자동 조절
-        $("#inputDiv").keyup(function () {
-            let newHeight = $(this).prop("scrollHeight") - 40;
-            // let newHeight = $(this).css("height");
-
-            if (newHeight > 400) {
-                $(this).css("height", "auto");
-                // $(this).css("height",newHeight+"px");
-                // $(this).css("overflow-y","hidden");
-            }
-        });
-
         // 게시판 읽기모드일 때 디자인 변경
         if ($("#board-title > input").attr("readonly") == "readonly") {
             let title = $("#board-title > input");
-            let content = $("#inputDiv");
+            let content = $("#bInputArea");
             let writerInfo = $("#writerInfo");
             title.css("border", "0");
             title.css("fontSize", "16pt");
+            content.prop("readonly","readonly");
             content.css("border", "0");
-            content.css("height", "auto");
+            content.height($("#bInputArea").prop("scrollHeight")+"px");
             writerInfo.css("display","flex");
         }
 
@@ -389,7 +376,7 @@ $(document).ready(function () {
         $("#bDelete").click(function () {
             if (confirm("정말로 삭제하시겠습니까?")) {
                 // alert("확인");
-                let formObj = $(this).parent().parent().parent();
+                let formObj = $("#bForm");
                 let bno = $("#bno").val();
                 formObj.attr("action", contextRoot + "board/" + bno + "?mod=delete");
                 formObj.submit();
@@ -400,22 +387,21 @@ $(document).ready(function () {
         // 게시글 수정 폼으로 변경
         $("#goUpdate").click(function () {
             // form태그 action 속성 변경
-            let formObj = $(this).parent().parent().parent();
+            let formObj = $("#bForm");
             let bno = $("#bno").val();
             formObj.attr("action", contextRoot + "board/" + bno + "?mod=modify");
 
             // 디자인 복구 및 readonly 속성 해제
             let title = $("#board-title > input");
-            let content = $("#inputDiv");
+            let content = $("#bInputArea");
             let writerInfo = $("#writerInfo");
             title.css("border", "1px solid gray");
             title.css("fontSize", "12pt");
             $("#board-title").prepend("<span>제목</span> <br>");
             content.css("border", "1px solid gray");
-            content.css("height", "auto");
+            content.removeProp("readonly");
             writerInfo.css("display", "none");
             title.removeAttr("readonly");
-            content.attr("contentEditable", "true");
             $("#likeBtnArea").css("display", "none");
 
             // 버튼 구성요소 변경
@@ -431,8 +417,18 @@ $(document).ready(function () {
 
         // 게시글 수정하기
         $(document).on("click", "#bUpdate", function () {
+            let title = $("#board-title > input").val().trim();
+            let content = $("#bInputArea").val().trim();
+
+            //제목 또는 내용 빈칸일 시 경고
+            if(title == "" || content == "")
+            {
+                alert("제목과 내용을 입력해주세요.");
+                return;
+            }
+
             $("#board-content > textarea").text($("#inputDiv").html());
-            $(this).parent().parent().parent().submit();
+            $("#bForm").submit();
         });
 
         // 게시글 수정 취소
@@ -447,20 +443,8 @@ $(document).ready(function () {
 
         // 덧글 입력창 크기 자동조절
         $("#cInput").keyup(function () {
-            // 스크롤 높이 가져오기
-            let newHeight = $(this).prop("scrollHeight") - 4;
-
-            /* 단위까지 가져오는 방법 */
-            // let currentHeight = $(this).css("height");
-
-            /* 단위를 제외해서 가져오는 방법 */
-            let currentHeight = $(this).height();
-
-            if (newHeight > currentHeight) {
-                $(this).css("height", newHeight + 15 + "px");
-                // $(this).css("height",newHeight+"px");
-                // $(this).css("overflow-y","hidden");
-            }
+            $(this).css('height', 'auto');
+            $(this).height(this.scrollHeight);
         });
 
         // 덧글 입력

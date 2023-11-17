@@ -28,7 +28,7 @@
     <c:import url="header.jsp"/>
 
     <%-- 게시글 작성 및 읽기 영역 --%>
-    <form action="<c:url value="/board"/>" method="post">
+    <form action="<c:url value="/board"/>" method="post" id="bForm">
         <div class="board-area">
             <input type="hidden" value="${boardDTO.bno}" id="bno">
             <input type="hidden" value="${boardDTO.b_uno}" name="b_uno">
@@ -51,12 +51,7 @@
 
             <%-- 게시글 내용 --%>
             <div id="board-content">
-                <%-- 게시글 내용 작성 contenteditable div --%>
-                <div id="inputDiv" ${type eq 'read' ? 'contenteditable="false"' : 'contenteditable="true"'}>
-                    ${boardDTO.b_content}
-                </div>
-                <%-- 제출용으로 contenteditable div 내용을 담을 textarea --%>
-                <textarea name="b_content" hidden="hidden" ></textarea>
+                <textarea name="b_content" id="bInputArea">${boardDTO.b_content}</textarea>
             </div>
 
             <%-- 좋아요 버튼 영역 --%>
