@@ -211,3 +211,4 @@ local.properties
 
 ### maven
 /target/
+/src/main/webapp/WEB-INF/spring/
