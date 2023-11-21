@@ -133,8 +133,6 @@ public class BoardController {
         objMap.put("list",list);
         objMap.put("ph", ph);
 
-        System.out.println("ph = " + ph);
-
         return objMap;
     }
 

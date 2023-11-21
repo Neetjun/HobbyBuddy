@@ -36,8 +36,6 @@ public class UserController
             // 닉네임 수정시 수정 대상 유저 id값을 임의로 조작하는 경우 방지
             if(!session.getAttribute("id").equals(user.getId()))
             {
-                System.out.println(session.getAttribute("id"));
-                System.out.println(user.getId());
                 ra.addFlashAttribute("unAuthErr","unoErr");
                 return "redirect:/";
             }
