@@ -209,6 +209,7 @@ local.properties
 # Typically, this file would be tracked if it contains build/dependency configurations:
 #.project
 
-### maven
+# maven
 /target/
 /src/main/webapp/WEB-INF/spring/root-context.xml
+.spring
