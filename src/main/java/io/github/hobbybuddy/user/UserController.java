@@ -24,17 +24,35 @@ public class UserController
     @PostMapping("")
     public String registration(UserDTO user, Model m, String mod, RedirectAttributes ra, HttpSession session, HttpServletRequest request)
     {
+        String goTo = request.getHeader("Referer");
+
         if(mod == null)
             mod = "";
+
         // PATCH 메서드 활용법 알아낼 때까지 임시 방편
         // 닉네임 수정
         if(mod.equals("modify"))
         {
+            // 닉네임 수정시 수정 대상 유저 id값을 임의로 조작하는 경우 방지
+            if(!session.getAttribute("id").equals(user.getId()))
+            {
+                System.out.println(session.getAttribute("id"));
+                System.out.println(user.getId());
+                ra.addFlashAttribute("unAuthErr","unoErr");
+                return "redirect:/";
+            }
+
             userService.modNickname(user);
             session.setAttribute("nickname",user.getNickname());
-            String goTo = request.getHeader("Referer");
 
             return "redirect:" + goTo;
+        }
+
+        // ID 중복방지 로직을 악의적으로 통과하는 경우 방지
+        if(userService.idDupCheck(user.getId()).equals("1"))
+        {
+            ra.addFlashAttribute("unAuthErr","unoErr");
+            return "redirect:/";
         }
 
         // 서비스 계층에서 user insert문 불러와서 실행
@@ -42,8 +60,6 @@ public class UserController
 
         // 성공 실패 확인
         ra.addFlashAttribute("regResult", result);
-
-        String goTo = request.getHeader("Referer");
 
         return "redirect:" + goTo;
     }

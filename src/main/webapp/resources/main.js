@@ -18,7 +18,6 @@ $(document).ready(function () {
             alert("해당 기능을 요청할 권한이 없습니다.");
     }
 
-
     /* 회원가입 및 로그인 모달창 띄우기 */
     $(".loginBox > button").click(function () {
         // 눌린 버튼의 id 대입
@@ -110,28 +109,34 @@ $(document).ready(function () {
         let idCheck = /^[a-z0-9+]{6,12}$/;
         // let pwCheck = /^[(A-Za-z)+0-9+]{8,15}$/; /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/
         let pwCheck = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,15}$/;
-        let nickCheck = /^(?:(?:[가-힣0-9]{1,6})|(?:[a-zA-Z0-9]{1,12}))$/
+        // let nickCheck = /^(?=.*[가-힣a-zA-Z])[가-힣a-zA-Z0-9]{1,12}$/;
+        let nickCheck = /^[가-힣a-zA-Z0-9]{1,12}$/;
+        let nickResult = $("#newNickname").val().match(nickCheck);
 
         if ($(this).parent().attr("method") == "post") {
-            // 아이디 검사
-            if (!idCheck.test($("#id > input").val())) {
-                alert("아이디 형식이 올바르지 않습니다.");
-                return;
+            if($("#modal-title").text() == "회원가입")
+            {
+                // 아이디 검사
+                if (!idCheck.test($("#id > input").val())) {
+                    alert("아이디 형식이 올바르지 않습니다.");
+                    return;
+                }
+                // 비밀번호 검사
+                if (!pwCheck.test($("#pw > input").val()) && $("#modal-title").text() != "닉네임 수정") {
+                    alert("비밀번호 형식이 올바르지 않습니다.");
+                    return;
+                }
+                if ($("#dupCheck").text() == "중복!") {
+                    alert("아이디가 중복됩니다.");
+                    return;
+                }
             }
-            // 비밀번호 검사
-            if (!pwCheck.test($("#pw > input").val()) && $("#modal-title").text() != "닉네임 수정") {
-                alert("비밀번호 형식이 올바르지 않습니다.");
-                return;
-            }
-            // 닉네임 검사
-            if (!nickCheck.test($("#newNickname").val())) {
-                alert("닉네임 형식이 올바르지 않습니다.");
-                return;
-            }
-            if ($("#dupCheck").text() == "중복!") {
-                alert("아이디가 중복됩니다.");
-                return;
-            }
+            if($("#modal-title").text() == "회원가입" || $("#modal-title").text() == "닉네임 수정")
+                // 닉네임 검사
+                if(nickResult == null) {
+                    alert("닉네임 형식이 올바르지 않습니다.");
+                    return;
+                }
         }
 
         // 모든 검사 통과하면 form 태그 제출
@@ -148,18 +153,19 @@ $(document).ready(function () {
             $("#nickname").html("<input type='hidden' name='_method' value='PATCH'/>");
             $("#id").html("현재 닉네임 : <b>" + nickname + "</b>");
             $("#id").append("<div>새로운 닉네임 : <input id='newNickname' name='nickname'/> " + "<input type='hidden' value='" + id + "' name='id'/></div>")
-            $("#id > div").append("<span class=\"regCondition\">한글 6글자 / 영어 12글자</span>");
+            $("#id > div").append("<span class=\"regCondition\">특수문자 제외 12자리 이하</span>");
             $("#id").append("<input name='mod' value='modify' type='hidden'/>");
             $("#pw").html("");
             $(".regCondition").css("display", "none");
+            $("#id > div").css("marginTop","10px");
             $("#id > div > span").css("display","inline");
             $("#id > div > span").css("margin-left","25px");
             $("#id > div > span").css("margin-top","5px");
             $("#regBtn").text("수정");
-            $("#regBtn").css("marginLeft", "100");
+            // $("#regBtn").css("marginLeft", "100");
             $("#regBtn").css("marginTop", "15");
             $("#modal-title").next().attr("method", 'post');
-            $(".modal-content").css("width", "450px");
+            $(".modal-content").css("width", "480px");
         }
 
         $(".modal").fadeIn();
@@ -453,8 +459,9 @@ $(document).ready(function () {
 
             if($(this).parent().attr("class") == "replyForm")
             {
-                tcno = $(this).parent().parent().prev().clone();
-                $(this).parent().append(tcno);
+                tcno = $(this).parent().parent().prev().prev().val();
+                let tgt = "<input value='"+tcno+"' hidden='hidden' name='tcno'/>";
+                $(this).parent().append(tgt);
             }
 
             if($("#cInput").val().trim().length == 0)
@@ -524,7 +531,7 @@ $(document).ready(function () {
             }
         });
 
-        // 덧글 가져오기
+        // 덧글 목록
         function cList(){
             $.ajax({
                 type: "GET"
@@ -537,10 +544,24 @@ $(document).ready(function () {
                             let hidden = cmtList[i].c_uno == uno ? "" : "hidden='hidden'";
                             let replyPadding = cmtList[i].tcno == null ? "" : "style='padding-left:80px'";
                             let replyDelBtn = cmtList[i].tcno == null ? "" : "style='margin-left:870px'";
-                            let isReply = cmtList[i].tcno == null ? cmtList[i].cno : cmtList[i].tcno;
                             html += "<div class='cmtItem' " + replyPadding + ">";
                             // 덧글 내용
-                            html += "<div id='c-content'>" + cmtList[i].c_content + "</div>";
+                            if(cmtList[i].tcno == null)
+                                html += "<div id='c-content'>" + cmtList[i].c_content + "</div>";
+                            else
+                            {
+                                let replyTgt = "";
+                                for(let j = 0; j < i; j++)
+                                {
+                                    if(cmtList[i].tcno == cmtList[j].cno && cmtList[j].tcno != null)
+                                    {
+                                        replyTgt = "<span style='font-weight: bold; margin-right: 8px;'>@" + cmtList[j].nickname +"</span>";
+                                        break;
+                                    }
+                                }
+                                html += "<div id='c-content'>" + replyTgt + cmtList[i].c_content + "</div>";
+                            }
+
                             // 덧글 프로필
                             html += "<div id='c-profile' class='profile'>";
                             html += "<div class='profile-image'><img src=" + contextRoot + "resources/image/profile.jpeg/></div>";
@@ -551,7 +572,7 @@ $(document).ready(function () {
                             //덧글 삭제버튼
                             html += "<button type='button' class='cancel cDelete' value='"
                                 + cmtList[i].cno + "'" + hidden + " " + replyDelBtn + ">삭제</button>";
-                            html += "<input name='tcno' class='tcno' hidden='hidden' value=" + "'" + isReply + "'" + "/>"
+                            html += "<input name='tcno' class='tcno' hidden='hidden' value=" + "'" + cmtList[i].cno + "'" + "/>"
                             html += "</div>";
                         }
                     else {

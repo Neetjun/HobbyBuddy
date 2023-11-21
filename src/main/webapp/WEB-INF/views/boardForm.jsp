@@ -9,7 +9,7 @@
 --%>
 <html>
 <head>
-    <title>게시판제목(임시)</title>
+    <title>${boardDTO.title}</title>
 
     <link href="<c:out value='${pageContext.request.contextPath}'/>/resources/main.css" rel="stylesheet" type="text/css" />
     <script src="https://kit.fontawesome.com/0fa0e562e0.js" crossorigin="anonymous"></script>
