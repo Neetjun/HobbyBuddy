@@ -1,6 +1,9 @@
 # Basic Crud Board Project - HobbyBuddy
 ### HobbyBuddy 설명 및 기획의도
 -----
+
+링크 : http://3.39.189.129:8080/hobbybuddy/
+
 HobbyBuddy는 본인의 일상 및 취미를 공유하는 매우 심플한 게시판입니다.  
 국비학원에서 진행한 팀프로젝트를 통해 많은 것을 배울 수 있었습니다만.  
 막상 취업준비를 하면서 프로젝트 완성에 급급한 나머지 사용했던 기술들에 대한  
