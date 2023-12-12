@@ -2,6 +2,13 @@ $(document).ready(function () {
 
     let flag = location.pathname.indexOf("board");
 
+    /* 모든 input 태그에서 enter key 동작 막기 */
+    $("input[type=text]").keydown(function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        };
+    });
+
     /* 회원가입 성공 알림 */
     if ($("#regCheck").val() == 1)
         alert("회원가입 완료!");
@@ -237,9 +244,9 @@ $(document).ready(function () {
                         for (let j = ph.startPage; j <= ph.endPage; j++) {
 
                             if (j == $("#page").val())
-                                pages += "<span id='curPage'>" + j + "</span>";
+                                pages += "<span class = 'page' id='curPage'>" + j + "</span>";
                             else
-                                pages += "<span id='" + j + "'>" + j + "</span>";
+                                pages += "<span class = 'page' id='" + j + "'>" + j + "</span>";
                         }
 
                         if (ph.totPage > 10 && ph.totPage != ph.endPage)
@@ -251,7 +258,6 @@ $(document).ready(function () {
                         $("#noItem").removeAttr("hidden");
                         $("#pages").html("");
                     }
-
                 }
                 , error: function (request, status, error) {
                     alert("code:" + request.status + "\n" + "message:" + request.responseText + "\n" + "error:" + error);
@@ -262,11 +268,12 @@ $(document).ready(function () {
         $("#myItem").click(function () {
             bList();
         });
-
         bList();
 
         // 게시글 검색
         $("#searchInput > button").click(function () {
+            $("#page").val(1);
+            $("#keyword").val($("#keywordInput").val());
             bList();
         });
 
@@ -276,9 +283,12 @@ $(document).ready(function () {
                 return;
 
             let newPage = $(this).attr("id");
+            let lastPage = $(".page").last().attr("id");
+
+            console.log("newPage = " + newPage);
+            console.log("lastpage = " + lastPage);
             $("#page").val(newPage);
-            $("#curPage").attr("id", $("#curPage").text());
-            $(this).attr("id", "curPage");
+
             bList();
         });
 

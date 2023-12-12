@@ -29,7 +29,8 @@
 <%--    <form action='<c:url value="/board"/>' method="get"/>--%>
         <div class="search">
             <div id="searchInput">
-                <input type="text" id="keyword" placeholder="검색어를 입력해주세요." name="keyword"/>
+                <input type="text" id="keywordInput" placeholder="검색어를 입력해주세요." name="keyword"/>
+                <input type="hidden" id="keyword">
                 <button type="submit"><i class="fa-sharp fa-solid fa-magnifying-glass"></i></button>
             </div>
             <div id="searchFilter">
