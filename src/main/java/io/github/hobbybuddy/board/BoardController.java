@@ -1,6 +1,7 @@
 package io.github.hobbybuddy.board;
 
 import io.github.hobbybuddy.Util.PagingHandler;
+import io.github.hobbybuddy.Util.UploadHandler;
 import io.github.hobbybuddy.domain.BoardDTO;
 import io.github.hobbybuddy.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,15 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import java.io.IOException;
+import java.util.*;
 
 @RequestMapping("/board")
 @Controller
@@ -34,7 +32,8 @@ public class BoardController {
 
     // 게시판 등록
     @PostMapping("")
-    public String postBoard(BoardDTO dto, HttpSession session, RedirectAttributes ra)
+    @Transactional
+    public String postBoard(BoardDTO dto, HttpSession session, RedirectAttributes ra) throws IOException
     {
 
         if(session.getAttribute("id") == null)
@@ -47,17 +46,31 @@ public class BoardController {
         Integer uno = (Integer)session.getAttribute("uno");
         dto.setB_uno(uno);
 
+        List<BoardDTO> myBoard = boardService.myBoardList(uno);
+        Integer bno = 0;
+
         // 게시판 DB 입력
         boardService.postBoard(dto);
 
-        int bno = 0;
+        // 게시글에 첨부된 이미지 경로 DB에 저장
+        int idx = 1;
 
-        List<BoardDTO> myBoard = boardService.myBoardList(uno);
+        for(String fileName : dto.getImgList().split(","))
+        {
+            HashMap<String, Object> fileMap = new HashMap<String, Object>();
 
-        // 내 작성글의 마지막 글(방금 작성한글)의 bno 얻기
-        bno = myBoard.get(0).getBno();
+            bno = myBoard.get(0).getBno()+1;
+
+            fileMap.put("fileName", fileName);
+            fileMap.put("bno",bno);
+
+            boardService.insertImg(fileMap);
+            idx++;
+        }
 
         String goTo = "/board/" + bno;
+
+        System.out.println("이동 전 까진 잘 되는듯?");
 
         return "redirect:" + goTo;
     }
@@ -81,10 +94,14 @@ public class BoardController {
         // isWriter 쿼리문이 필요가 없지 않나??
         boolean isWriter = dto.getB_uno() == (Integer)session.getAttribute("uno");
 
+        System.out.println("bno = " + bno);
+        System.out.println("boardService.getImg(bno) = " + boardService.getImg(bno));
+
         m.addAttribute("type", "read");
         m.addAttribute("isWriter",isWriter);
         m.addAttribute("writer",boardService.getWriter(dto.getBno()));
         m.addAttribute("boardDTO", dto);
+        m.addAttribute("imgList", boardService.getImg(bno));
 
         return "boardForm";
     }
@@ -161,6 +178,19 @@ public class BoardController {
             resultMap.put("result","fail");
             return resultMap;
         }
+    }
 
+    // 게시글 첨부파일 등록
+    @ResponseBody
+    @PostMapping("/upload")
+    public ArrayList<String> uploadFile(@RequestParam("files") MultipartFile[] file) throws IOException
+    {
+        ArrayList<String> uploadList;
+
+        UploadHandler uploadHandler = new UploadHandler();
+
+        uploadList = uploadHandler.uploadFile(file);
+
+        return uploadList;
     }
 }

@@ -28,7 +28,7 @@
     <c:import url="header.jsp"/>
 
     <%-- 게시글 작성 및 읽기 영역 --%>
-    <form action="<c:url value="/board"/>" method="post" id="bForm">
+    <form action="<c:url value="/board"/>" method="post" id="bForm" enctype="multipart/form-data">
         <div class="board-area">
             <input type="hidden" value="${boardDTO.bno}" id="bno">
             <input type="hidden" value="${boardDTO.b_uno}" name="b_uno">
@@ -54,6 +54,11 @@
                 <textarea name="b_content" id="bInputArea">${boardDTO.b_content}</textarea>
             </div>
 
+            <div id="imgArea">
+            </div>
+            <input type="text" id="addImgList" name="imgList" hidden="hidden">
+            <input type="text" id="imgList" hidden="hidden" value="${imgList}">
+
             <%-- 좋아요 버튼 영역 --%>
             <c:if test="${type eq 'read'}">
                 <div id="likeBtnArea">
@@ -73,7 +78,6 @@
                     </c:when>
                     <c:otherwise>
                         <button id="imageBtn" type="button">+</button>
-                        <input type="file" hidden="hidden" id="imageInput">
                         <button type="button" id="bSubmit" class="submitBtn">등록</button>
                         <button id="bCancel" class="cancel" type="button">취소</button>
                     </c:otherwise>
@@ -81,6 +85,8 @@
             </div>
         </div>
     </form>
+
+    <input type="file" multiple accept="image/*" hidden="hidden" id="imageInput" name="file">
 
     <c:if test="${type eq 'read'}">
         <div class="comment-area">

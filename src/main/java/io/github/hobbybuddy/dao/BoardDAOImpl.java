@@ -56,4 +56,8 @@ public class BoardDAOImpl implements BoardDAO {
     public void updateViewCnt(BoardDTO dto) {
         session.update(namespace+"updateViewCnt",dto);
     }
+    @Override
+    public void insertImg(HashMap<String, Object> fileMap) { session.insert(namespace+"insertImg",fileMap); }
+    @Override
+    public List<String> getImg(Integer bno) { return session.selectList(namespace+"getImg", bno); }
 }

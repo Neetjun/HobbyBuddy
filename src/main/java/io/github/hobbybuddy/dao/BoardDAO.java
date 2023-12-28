@@ -2,6 +2,7 @@ package io.github.hobbybuddy.dao;
 
 import io.github.hobbybuddy.domain.BoardDTO;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,4 +20,6 @@ public interface BoardDAO {
     void likeContent(HashMap<String,String> likeMap);
     void updateLikeCnt(HashMap<String,String> likeMap);
     void updateViewCnt(BoardDTO dto);
+    void insertImg(HashMap<String,Object> fileMap);
+    List<String> getImg(Integer bno);
 }

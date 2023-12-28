@@ -45,4 +45,6 @@ public class BoardService
     public void likeContent(HashMap<String,String> likeMap) {dao.likeContent(likeMap);}
     public void updateLikeCnt(HashMap<String,String> likeMap) {dao.updateLikeCnt(likeMap);}
     public void updateViewCnt(BoardDTO dto) {dao.updateViewCnt(dto);}
+    public void insertImg(HashMap<String,Object> fileMap) {dao.insertImg(fileMap);}
+    public List<String> getImg(Integer bno) { return dao.getImg(bno); }
 }

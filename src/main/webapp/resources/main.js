@@ -351,6 +351,26 @@ $(document).ready(function () {
             content.css("border", "0");
             content.height($("#bInputArea").prop("scrollHeight")+"px");
             writerInfo.css("display","flex");
+
+            // 첨부된 이미지가 있다면 출력
+            if($("#imgList").val() != "[]")
+            {
+                let tmp = $("#imgList").val().replaceAll("[","").replaceAll("]","");
+
+                let imgList = tmp.split(", ");
+
+                for(let i = 0; i < imgList.length; i++)
+                {
+                    let img = "<img class='imgPreview' src='"+ imgList[i] +"'>";
+                    $("#imgArea").append(img);
+
+                    $('.imgPreview').css("marginTop","10px");
+                    $('.imgPreview').css("marginBottom","10px");
+                    $('.imgPreview').css("marginRight","10px");
+                    $('.imgPreview').css("width","150px");
+                    $('.imgPreview').css("height","150px");
+                }
+            }
         }
 
         // 좋아요 기능
@@ -455,6 +475,63 @@ $(document).ready(function () {
         // 이미지 첨부 기능
         $("#imageBtn").click(function () {
             $("#imageInput").click();
+        });
+
+        $("#imageInput").change(function () {
+
+            let data = new FormData();
+            let files = $(this)[0].files;
+
+            console.log(files);
+
+            for(let i = 0; i < files.length; i++)
+                data.append("files", files[i]);
+
+            console.log(data);
+
+            $.ajax({
+                type : "POST"
+                , enctype : "multipart/form-data"
+                , processData : false
+                , contentType : false
+                , url : contextRoot + "board/upload"
+                , data : data
+                , success : function (result) {
+                    if(result.length != 0)
+                    {
+
+                        let imgList = [];
+
+                        for(let i = 0; i < result.length; i++)
+                        {
+                            let img = "<img class='imgPreview' src='"+ result[i] +"'>";
+                            $("#imgArea").append(img);
+
+                            $('.imgPreview').css("marginTop","10px");
+                            $('.imgPreview').css("marginBottom","10px");
+                            $('.imgPreview').css("marginRight","10px");
+                            $('.imgPreview').css("width","150px");
+                            $('.imgPreview').css("height","150px");
+
+                            if(i != result.length-1)
+                                imgList[i] = result[i]+",";
+                            else
+                                imgList[i] = result[i];
+                        }
+
+                        for(let i = 0; i < imgList.length; i++)
+                        {
+                            let tmp = $("#addImgList").val();
+                            $("#addImgList").val(tmp+imgList[i]);
+                        }
+
+                        console.log(imgList);
+                    }
+                }
+                , error(request) {
+                    console.log(request.responseText);
+                }
+            });
         });
 
         // 덧글 입력창 크기 자동조절

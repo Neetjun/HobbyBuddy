@@ -1,32 +1,26 @@
 package io.github.hobbybuddy.domain;
 
-import java.util.Date;
+import java.util.ArrayList;
 
 public class BoardDTO
 {
     private Integer bno, b_uno, like_count, view_count, cmt_count;
     private String title, b_content;
     private String b_reg_date, u_date;
-
-    @Override
-    public String toString() {
-        return "BoardDTO{" +
-                "bno=" + bno +
-                ", b_uno=" + b_uno +
-                ", like_count=" + like_count +
-                ", view_count=" + view_count +
-                ", cmt_count=" + cmt_count +
-                ", title='" + title + '\'' +
-                ", b_content='" + b_content + '\'' +
-                ", b_reg_date='" + b_reg_date + '\'' +
-                ", u_date='" + u_date + '\'' +
-                '}';
-    }
+    private String imgList;
 
     public BoardDTO(Integer b_uno, String title, String b_content) {
         this.b_uno = b_uno;
         this.title = title;
         this.b_content = b_content;
+    }
+
+    public String getImgList() {
+        return imgList;
+    }
+
+    public void setImgList(String imgList) {
+        this.imgList = imgList;
     }
 
     public Integer getCmt_count() {

@@ -114,4 +114,15 @@
         SET VIEW_COUNT = (SELECT VIEW_COUNT FROM BOARD WHERE BNO = #{bno})+1
         WHERE BNO = #{bno}
     </update>
+
+    <insert id="insertImg" parameterType="hashMap">
+        INSERT INTO IMAGE(F_NAME, F_PATH, F_BNO, F_DATE)
+        VALUES (#{fileName}, 'C:\Development\HobbyBuddy\upload\'||#{fileName}, ${bno}, SYSDATE)
+    </insert>
+
+    <select id="getImg" parameterType="int" resultType="String">
+        SELECT F_NAME
+        FROM IMAGE
+        WHERE F_BNO = ${bno}
+    </select>
 </mapper>
