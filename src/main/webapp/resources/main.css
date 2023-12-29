@@ -20,6 +20,11 @@ html, body
     display: none;
 }
 
+.modal > div
+{
+    display: none;
+}
+
 .modal-content
 {
     background: white;
@@ -436,16 +441,21 @@ boardForm.jsp
     display: flex;
     justify-content: start;
     overflow: auto;
+    white-space: normal;
     width: 1000px;
 }
 
-.imgPreview
+.imgPreview:hover
 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    margin-right: 10px;
-    width: 150px;
-    height: 150px;
+    cursor: pointer;
+    border: 2px solid dodgerblue;
+}
+
+.imgOriginal
+{
+    display: block;
+    height: 100%;
+    margin: 0 auto;
 }
 
 #imageBtn

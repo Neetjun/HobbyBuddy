@@ -121,7 +121,11 @@
 
     <%-- 헤더 메뉴 전용 모달창 --%>
     <div class="modal">
-        <c:import url="modalForHeader.jsp"/>
+        <div id="m1">
+            <c:import url="modalForHeader.jsp"/>
+        </div>
+        <div id="m2">
+        </div>
     </div>
 
     <%-- 회원가입 및 로그인 성공 여부 확인 --%>

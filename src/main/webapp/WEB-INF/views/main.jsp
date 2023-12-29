@@ -79,7 +79,9 @@
 
     <%-- 로그인 및 회원가입 모달창 영역 --%>
     <div class="modal">
-        <c:import url="modalForHeader.jsp"/>
+        <div id="m1">
+            <c:import url="modalForHeader.jsp"/>
+        </div>
     </div>
     <%-- 로그인 및 회원가입 모달창 영역 끝 --%>
 

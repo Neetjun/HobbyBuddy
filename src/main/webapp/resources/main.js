@@ -52,12 +52,15 @@ $(document).ready(function () {
             $("#regBtn").text("회원가입");
             $("#modal-title").next().attr("method", 'post');
         }
+        $("#m1").css("display","block");
         $(".modal").fadeIn();
     });
 
-    /* 회원가입 및 로그인 취소 시 모달창 닫기*/
+    /* 모달창 닫기*/
     $("#modalCancel").click(function () {
         $("#dupCheck").text("");
+        $("#m1").css("display","none");
+        $(".modal > img").detach();
         $(".modal").fadeOut();
     });
 
@@ -513,6 +516,7 @@ $(document).ready(function () {
                             $('.imgPreview').css("width","150px");
                             $('.imgPreview').css("height","150px");
 
+
                             if(i != result.length-1)
                                 imgList[i] = result[i]+",";
                             else
@@ -532,6 +536,21 @@ $(document).ready(function () {
                     console.log(request.responseText);
                 }
             });
+        });
+        
+        // 이미지 크게보기
+        $(document).on("click",".imgPreview",function () {
+
+            let tgtImg = $(this).clone();
+            tgtImg.attr("class","imgOriginal");
+            tgtImg.removeProp("style");
+            $(".modal").append(tgtImg);
+
+            $(".modal").fadeIn();
+
+
+
+
         });
 
         // 덧글 입력창 크기 자동조절
