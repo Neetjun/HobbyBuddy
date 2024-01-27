@@ -176,6 +176,7 @@ $(document).ready(function () {
             $("#regBtn").css("marginTop", "15");
             $("#modal-title").next().attr("method", 'post');
             $(".modal-content").css("width", "480px");
+            $("#m1").css("display","block");
         }
 
         $(".modal").fadeIn();
@@ -547,10 +548,6 @@ $(document).ready(function () {
             $(".modal").append(tgtImg);
 
             $(".modal").fadeIn();
-
-
-
-
         });
 
         // 덧글 입력창 크기 자동조절
